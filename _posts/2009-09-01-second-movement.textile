@@ -1,0 +1,29 @@
+---
+layout: post
+title: "Visual Music Making with Processing and openFrameworks"
+---
+
+After seeing some of the work of folks like "Golan Levin":http://flong.com and "Ben Fry":http://benfry.com I was inspired to learn a little more about "openFrameworks":http://openframeworks.cc and "Processing":http://processing.org.  This is a log of a project I eventually called _second movement_ that came as a result.
+
+The goal of this project was to build something that responds to full body input with pleasing sights and sounds.  As motion is detected (via an attached web cam) it is highlighted in a revolving color spectrum.  In addition, motion is mapped onto a configurable musical scale with individual notes being represented as on-screen sprites.  The result is intended to be pleasing to both the eyes and ears.
+
+The following is a video capture of the original version of second movement written in the Processing environment.
+
+<object width="640" height="480"> 
+<param name="allowfullscreen" value="true"> 
+<param name="allowscriptaccess" value="always"> 
+<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=6373420&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1"> 
+<embed src="http://vimeo.com/moogaloop.swf?clip_id=6373420&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="640" height="480"> 
+</object> 
+
+The second video was recorded after a ground-up rewrite of second movement in openFrameworks.  This resulted in the ability to run at a much higher framerate than I was getting with the Processing version.
+
+<object width="640" height="480"> 
+<param name="allowfullscreen" value="true"> 
+<param name="allowscriptaccess" value="always"> 
+<param name="movie" value="http://vimeo.com/moogaloop.swf?clip_id=7880483&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1"> 
+<embed src="http://vimeo.com/moogaloop.swf?clip_id=7880483&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="640" height="480"> 
+</object> 
+
+The "source code":http://github.com/dietrichf/secondmovement for the openFrameworks port can be found on my "github account":http://github.com/dietrichf.
+

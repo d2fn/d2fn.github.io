@@ -1,0 +1,11 @@
+---
+layout: default
+title: Dietrich Featherston
+---
+
+<h2>stuff i've done</h2>
+<ul class="posts">
+  {% for post in site.posts %}
+    <li><a href="{{ post.url }}">{{ post.title }}</a> <span>{{ post.date | date_to_string }}</span></li>
+  {% endfor %}
+</ul>

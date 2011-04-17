@@ -1,0 +1,152 @@
+---
+layout: post
+title: "Schedule Scraping (aka The Real Semantic Web)"
+---
+
+I was recently responsible for organizing a trip to "Adobe MAX 2010":http://max.adobe.com for a few folks.  By and large conference schedule postings seem to focus on the individual attendee and don't scale well to group planning.
+
+* Anyone attending a sufficiently large conference can attend only a small portion of the sessions.  Conference planners exploit this by introducing concurrency into the schedule.
+* A _lot_ of concurrency.  This means that visualizing this concurrency in a meaningful way for planning purposes is difficult.  There is probably a good way, but I haven't seen that demonstrated by conference planning sites.
+* Combining the concurrency of events with the concurrency of a group of attendees makes this more complex if the goal is to get maximal coverage of a few topics.
+
+I didn't solve these problems, but I was able to hack together some software to help the planning process along--the goal being to iteratively add a session the tentative schedule and see how this impacted our ability to get good coverage of sessions with a fixed group of attendees.  The first challenge was to figure out how session data was modeled.  A quick peak at the source for the "session scheduler":https://max.adobe.com/schedule/by-session/ shows that the markup is not sent from the server but rather generated client side by referencing model objects living on the server.  This is great news because it implies the availability of structured session schedule data.
+
+h3. Safari Web Inspector
+
+The web inspector built in to Safari will show any additional files being downloaded to the client.
+
+!/images/safwebinspector.png!
+
+Bingo.  We see a files <code>sessions.json</code> and <code>speakers.json</code> which, upon closer inspection contain all the information we need about the session schedule.  Some ugly command line magic (omitted here) gives us a flat file with each session guid on its own line. 
+
+h3. Putting it all together
+
+At this point we have a file <code>all-sessions.txt</code> and we can begin moving sessions we want to actually attend to <code>our-sessions.txt</code>.  At this point we can also generate a third file <code>skipped-sessions.txt</code> with a complete listing of what we're missing.  To do that, we just need to run the following.
+
+<pre name="code" class="bash">
+cat all-sessions.txt our-sessions.txt | sort -u > skipped-sessions.txt
+</pre>
+
+From each of these files we can generate a few by-products which give us a better idea of what we're attending, what we're missing, and how many people we need to send to get good coverage of the material we're interested in.  We start by writing a simple Python script which, given one of the session id listing files as input, will generate an ical to visualize concurrency and a linear agenda to give folks to carry with them at the conference.  In addition, we want to generate additional guid listing files that contain the session name as an additional column (tab delimited) next to the guid.  This will give us a way to quickly search for the guid of topics we're interested in in <code>skipped-sessions.txt</code> and move them to <code>our-sessions.txt</code>.
+
+A single python script manages this process so long as you take on the role of managing the guid lists.  There is no great magic here.  The source can be found on "github":http://github.com/dietrichf/adobe-max-scrape.  This script has dependencies on "simplejson":http://code.google.com/p/simplejson/ and an iCalendar "package":http://codespeak.net/icalendar/ for Python.  Running the script like so, for example, against our <code>all-sessions.txt</code> file
+
+<pre name="code" class="bash">
+python scrape.py all-sessions.txt max2010-all
+</pre>
+
+downloads up to date schedule information and generates a few outputs.
+
+* An iCalendar file with all session details: <code>max2010-all.ics</code>
+* A linear agenda layed out in HTML for carrying around at the conference: <code>max2010-all.html</code>  All description and time information is included inline, as well as a numeral next to each session title showing how many times that session is duplicated over the course of the conference.  This turned out to be an important part of recognizing when we could skip a session and catch it later if there was too much going on in that time slot.
+* A helper file <code>all-sessions-report.tsv</code> that includes the guids and session names of all sessions in the input file.  This is useful for grepping through for buzzword coverage.  For example, I would grep for keywords like Android or HTML in <code>skipped-sessions-report.tsv</code> and add those sessions into <code>our-sessions.txt</code> and generate a new schedule (then regenerate <code>skipped-sessions.txt</code> per above).
+* A CouchDB compatible JSON dump of sessions: <code>max2010-all.json</code>
+
+
+h3. CouchDB ftw!
+
+To make things more interesting, why not generate a CouchDB compatible dump out of all of this?  After all the data is JSON and playing with data in Couch is fun.  We just need to do two things.
+
+# Add an <code>_id</code> guid to each session so that CouchDB uses the same guids we have been using up to this point
+# Denormalize speaker data so that each document includes data about the presenters.
+
+The source data in <code>sessions.json</code> doesn't include any information about the speakers for each session, only the guid of the speaker.  Luckily as we see in Safari Web Inspector the speaker data is encapsulated in another single file <code>speakers.json</code>.  So during script initialization, we copy speaker data into each session.  Upon completion the script writes the couch-compatible json to a new file.  We can now write a simple script to upload the data to a new database.
+
+<pre name="code" class="bash">
+#!/bin/csh
+
+set db = $argv[1]
+set file = $argv[2]
+
+curl -X DELETE $db
+curl -X PUT $db
+curl -X POST -H 'Content-type: application/json' -d @$file $db/_bulk_docs
+</pre>
+
+Then we can push the updates to a new CouchDB database.
+
+<pre name="code" class="bash">
+./post2couch http://0.0.0.0:5984/max max2010-all.json
+</pre>
+
+
+A resulting session document looks something like the following from Futon.
+
+<pre name="code" class="javascript">
+{
+   "_id": "fd13fd66-114d-46c1-8e04-5c864b6b5d3c",
+   "_rev": "1-d7d694fef133b22ab2f24c34668548c5",
+   "speakers": [
+       {
+           "bio": "James Talbot has been with Adobe for over ten years, on both the sales engineering and training teams, and has many years of experience working with Flex and LiveCycle. James has traveled extensively throughout the world promoting Adobe products as well as training and certifying instructors. He has spoken at numerous conferences. James has written \u201cObject Oriented ActionScript 2.0\u201d as well as the \u201cFlex 3: Training from the Source\u201d book as well as hosting videos from Total Training and Lynda.com .  James has been an integral team member on many high profile Rich Internet Application and LiveCycle consulting assignments.",
+           "attendee": {
+               "session_instances": [
+               ],
+               "firstname": "James",
+               "schedule": [
+               ],
+               "lastname": "Talbot",
+               "account_token": "75b6ef3c3ca07feb9ea481e049f818b6",
+               "properties": [
+                   {
+                       "key": "day1",
+                       "value": "true"
+                   },
+                   {
+                       "key": "attendee_id",
+                       "value": "223913"
+                   },
+                   {
+                       "key": "day2",
+                       "value": "true"
+                   },
+                   {
+                       "key": "day3",
+                       "value": "true"
+                   }
+               ],
+               "last_access": "2010-08-06T11:44:42-07:00",
+               "id": "57945fc1-b707-4db7-a884-9a0506362b29"
+           },
+           "firstname": "James",
+           "lastname": "Talbot",
+           "high_ranking": false
+       }
+   ],
+   "event_id": "ebdabc28-aab4-479f-86f3-6bd9d97b4cc7",
+   "name": "Introducing Flex and LiveCycle Integration",
+   "video_url": "",
+   "prerequisites": "",
+   "description": "Learn how to take advantage of the built-in hooks between Flex and Adobe LiveCycle ES, building a web-based, data-driven application. You'll create complex data models using the latest modeling elements and exchange data between Flex and LiveCycle via built-in LiveCycle endpoints. By using both Adobe LiveCycle Workbench and Flash Builder, you'll hone your skills and learn best practices that span both technologies.\r\n\r\n\r\n",
+   "has_video": false,
+   "private": false,
+   "updated_at": "2010-06-17T18:06:20-07:00",
+   "instances": [
+       {
+           "code": "",
+           "session_id": "fd13fd66-114d-46c1-8e04-5c864b6b5d3c",
+           "datetime": "2010-10-27T08:30:00-07:00",
+           "date": "2010-10-27",
+           "room_id": 53,
+           "time": "08:30",
+           "duration": 90,
+           "id": 149
+       }
+   ],
+   "filter_items": [
+       3,
+       4,
+       7,
+       9,
+       10,
+       16,
+       640,
+       725,
+       732,
+       742,
+       773
+   ]
+}
+</pre>
+
+

@@ -1,0 +1,132 @@
+body {
+background-color: #fefefe;
+color:  #000000;
+/*font-family: "Book Antiqua", "Hoefler Text", Inconsolata, "Palatino Linotype", serif;*/
+font-family: 'Baskerville','Adobe Caslon', Garamond, Times, 'Nimbus Roman No9 L';
+font-size: 1.0em;
+line-height: 1.2em;
+}
+
+h1 a, h2 a { text-decoration: none; }
+h2 {
+	margin-bottom: 0;
+}
+h2.post-title { font-size: 130%; margin-bottom: 0px; }
+h3 { font-size: 100%; }
+
+#header {
+font-size: 100%;
+border-width: 0 0 1px 0;
+border-style: dashed;
+border-color: #A0A0A0;
+padding: 0 0 7px 0;
+}
+
+#header h1 {
+padding: 0;
+margin: 0px 0px 7px 0px;
+font-size: 180%;
+text-align: left;
+}
+#header h1 a, #header h1 a:visited { color: #000; }
+
+p.nav {
+margin-top:  0px;
+margin-bottom: 0px;
+}
+
+a {
+text-decoration: none;
+color: #5a33c9;
+}
+a:hover { text-decoration: underline; }
+a img { border:0; }
+
+p.timestamp {
+margin-top:  0.5em;
+font-size: small;
+font-variant: small-caps;
+}
+
+#wrap {
+width: 39em;
+padding: 5px 5px 5px 5px;
+margin: 10px 0px 0px 10px;
+border-style: dashed;
+border-color: #AFAFAF;
+border-width: 0;
+}
+
+#content {
+font-size: 110%;
+line-height: 1.3em;
+}
+
+code {
+border-color: #AFAFAF;
+border-width: 0px 0px 1px 0px;
+border-style: dotted;
+background-color: #f5eeea;
+font-weight: bold;
+}
+
+ul.posts li {
+list-style: none;
+}
+ul.posts li span {
+  float: right;
+  color: #868686;
+}
+
+#related li { font-size: 85%; }
+
+#footer {
+border-width: 1px 0 0 0;
+border-color: #A0A0A0;
+text-align: right;
+border-style: dashed;
+font-size: 75%;
+color: #464646;
+}
+
+#footer a {
+text-decoration: none;
+color: #464646;
+}
+
+small {
+font-size: 80%;
+}
+
+#flickr_badge {
+  margin: 0px;
+  height: 600px;
+  text-align: center;
+}
+
+#flickr_badge img {
+  margin: 5px;
+  padding: 5px;
+  background: #545454;
+  float: left;
+  height: 120px;
+  width: auto;
+}
+
+.photo {
+background:#fff;
+border:1px solid #bababa;
+margin:6px 18px 2px 5px;
+padding:2px;
+}
+
+blockquote {
+background:#DFDFDF;
+border:1px solid #c8c8c8;
+color:#000;
+font-size: 0.8em;
+line-height: 1.4em;
+padding: 0px 4px 0px 10px;
+margin: 0 0 0 1.2em;
+}
+
