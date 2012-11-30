@@ -3,11 +3,12 @@ layout: default
 title: me?
 ---
 
-If you have questions about the material here feel free to contact me at d@d2fn.com.  I'm also active on a few other online services.
+I can be reached at <a href="mailto:d@d2fn.com">d@d2fn.com</a> as well as the following
 
-* "@d2fn":http://twitter.com/d2fn on twitter
-* "github.com/dietrichf":http://github.com/dietrichf
+* "d2fn on twitter":http://twitter.com/d2fn
+* "vimeo":http://vimeo.com/d2fn
 * "flickr":http://www.flickr.com/photos/iamdietrich/sets/
-* "vimeo.com/d2fn":http://vimeo.com/d2fn
-* "8tracks.com/d2fn":http://8tracks.com/d2fn
+* "github.com":http://github.com/dietrichf
+* "8tracks":http://8tracks.com/d2fn
+* "linkedin":http://www.linkedin.com/in/dietrichf
 

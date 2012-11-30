@@ -8,15 +8,6 @@ layout: default
 {{ content }}
 </div>
 
-<div id="related">
-  <h3>possibly related</h3>
-  <ul>
-    {% for post in site.related_posts %}{% if post.url != page.url %}
-    <li><a href="{{ post.url }}">{{ post.title }}</a> <span>{{ post.date | date_to_string }}</span></li>
-    {% endif %}{% endfor %}
-  </ul>
-</div>
-
 <script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shCore.js"></script>
 <script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushRuby.js"></script>
 <script language="javascript" src="http://communicatopia.s3.amazonaws.com/js/shBrushPhp.js"></script>
