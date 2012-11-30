@@ -18,4 +18,4 @@ This project nicknamed _kepler_ aimed to build unique, generative artwork.  Each
 </div>
 <!-- End of Flickr Badge -->
 
-The "source code":http://github.com/dietrichf/kepler can be found on my "github page":http://github.com/dietrichf.
+Find the "source":http://github.com/dietrichf/kepler on github.

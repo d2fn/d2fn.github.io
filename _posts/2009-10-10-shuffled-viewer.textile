@@ -14,4 +14,4 @@ The following is a video demo I made with "Kate":http://twitter.com/mkabel
 <embed src="http://vimeo.com/moogaloop.swf?clip_id=6675118&amp;server=vimeo.com&amp;show_title=1&amp;show_byline=1&amp;show_portrait=0&amp;color=00ADEF&amp;fullscreen=1" type="application/x-shockwave-flash" allowfullscreen="true" allowscriptaccess="always" width="640" height="480"> 
 </object>
 
-The full "source code":http://github.com/dietrichf/shuffled-viewer for this project can be found on my "github account":http://github.com/dietrichf.
+Find the "source":http://github.com/dietrichf/shuffled-viewer on github.
