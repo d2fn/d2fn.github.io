@@ -6,9 +6,9 @@ title: me?
 I can be reached at <a href="mailto:d@d2fn.com">d@d2fn.com</a> as well as the following
 
 * "d2fn on twitter":http://twitter.com/d2fn
+* "linkedin":http://www.linkedin.com/in/dietrichf
 * "vimeo":http://vimeo.com/d2fn
 * "flickr":http://www.flickr.com/photos/iamdietrich/sets/
-* "github.com":http://github.com/dietrichf
 * "8tracks":http://8tracks.com/d2fn
-* "linkedin":http://www.linkedin.com/in/dietrichf
-
+* "showyou":http://showyou.com/d2fn
+* "tumblr":http://d2fn.tumblr.com
