@@ -1,0 +1,63 @@
+---
+layout: post
+title: "Functional Specifications for Infrastructure Engineers"
+---
+
+h3. Intro
+
+If you plan on writing some software, this is for you. If you are planning on writing software in a distributed system--doubly so. The following axioms have been helpful in guiding my engineering efforts in the past. I'll refer to them a few times here.
+
+bq. *Axiom #1: A service isn’t "fully designed" until it’s in production, has acceptable stability, and is is fast enough for your needs.*
+
+bq. *Axiom #2: Systems are more likely to break at the interfaces than anywhere else.*
+
+“Interface” has a broad definition here and can refer to anything from your use of third party libraries to dependence on a service running in another address space. The idea here is that isolated codebases are easier to reason about and tend to be better behaved than their aggregate counterparts.
+
+A functional specification is the artifact of structured thought about an engineering problem which aids in its implementation. Let's talk about what form this should take and why you should go through with it.
+
+
+h3. Why should you write a functional specification?
+
+The primary goal of a functional specification is to prevent a significant percentage of conceptual and design errors from entering the implementation phase of a program or, worse, becoming part of a fully designed program (per axiom #1). Catching these problems early means we can address them more cheaply. During the process, you and your colleagues should also begin to form a clear mental model of the work before it is fully designed.
+
+
+h3. What should be covered in a functional specification?
+
+In no particular order, here are some focus areas.
+
+*Specify product impact*
+If the proposed work is required for the advancement of your product or describes a new product area, that should comprise much of the specification work.
+
+*Blackbox the proposed work*
+Describe the inputs and outputs of the system you plan to build. Use diagrams and quality prose. If you later realize you've missed something, it's a good idea to add it and consider it in light of the specification as a whole. Focus here on _what_ the system does and _why_. Avoid discussion of _how_. Don't muddy this part of the discussion with how ZooKeeper will be used or that perstant data will be stored in Riak, for example. Instead focus on orienting yourself and your colleages to the responsibilities of the system. This is where you grease the cognitive wheels and lay a foundation for the rest of the discussion.
+
+*Describe public interfaces*
+If the service exposes a public interface, document its behavior before building it. You’ll need to revisit once the system is fully designed (per axiom #1) but, since this is externally visible behavior, the importance of addressing during specification can't be overstated. If you are describing an HTTP REST API, give attention to each endpoint and its inputs and outputs.
+
+*Specify messaging and interactions with other services*
+Services rarely run in isolation. With rare exception, integration points exist with other services. A functional specification should describe these integration points. See axiom #2 for why this part of a specification is so important. Be as specific as you can. This means documenting both the _syntax_ and the _semantics_ of any messaging between services in addition to the intended transport. Describe what happens in the event of message loss, for example. If you plan to be reliant on HTTP idempotency, say so.
+
+Specifying these interactions can be tricky because the boundary between _what_ the service does and _how_ it does it blurs. This is normal. Don't fret. Just be aware of this fact and choose your words appropriately. It is usually helpful to frame this discussion in terms of the blackbox work done earlier.
+
+*Describe projected operational burden*
+The spec should help those responsible for operating the service understand the projected operational burden. The goal here is not to write an operational playbook. That is not yet possible at this stage of the process. But you should set some expectations. If a database, queue, or other storage subsystem is required, then say so. If you expect a lot of file descriptor churn, that's also a good thing to include. Describe the health checks you plan to write that continuously assert the health of this service. If possible, estimate required hardware resources.
+
+*Plan for redundancy*
+Describe your redundancy plan. How will the overall service continue to function if one instance experiences total or partial failure? How will workload be distributed amongst instances of the service? Do instances of this service need to coordinate amongst themselves or other services?
+
+Mindful attention to failure pathology is a critical part of the specification. Bear in mind that failures tend to cascade across dependent services. A quick review of 
+distributed computing fallacies":http://en.wikipedia.org/wiki/Fallacies_of_Distributed_Computing is often helpful.
+
+
+h3. How do you know when to write a functional specification?
+
+First make sure the service solves a real problem that is well-aligned with business goals. Determining that is out of scope of this post, but is critically important so don't let it slide. I'm assuming you've got that part figured out but take the time to make sure before continuing. Committing even to the specification of work that needn't be done is expensive and difficult to unwind.
+
+In short, a functional specification should be written for any significant software undertaking. In some cases, this isn’t so easy. For example, sometimes we confuse the pervasive design goals of a whole product as something that should be broken into discrete engineering tasks. If you find yourself referring to disparate systems when talking about it, it’s probably a meta-concern and can’t be fully reasoned about with an acutely targeted functional spec. If this is the case, it's a good idea to write down the goals in specific terms and get an understanding of the points of impact on the rest of the system. From there, you will have a better understanding of where to focus your energy when it comes time to specify any work that falls out. This may need to be repeated a number of times before it's clear what actually needs to be built.
+
+
+h3. How to know when to stop writing the spec and start implementing the spec
+
+As soon as you and your colleagues are comfortable with the specification then fire away. By this point a number of eyes have seen the proposed work and there is a good chance your colleagues have helped you avoid some landmines you might not have foreseen. Be sure to budget time for getting feedback and try not to rush this process. The time investment will vary heavily depending on many factors such as team size and criticality of work. 
+
+Finally, it is tempting to skip many of these suggestions if you are working in a small team or trying to ship something quickly. It is likely that adaptations are a good idea in many cases as there is no one right way to plan an engineering project. But follow through on functional specifications is a good way to slow the buildup of technical debt. This is a major problem which tends to plague teams that are moving fast such as a startup in their first year. It may seem counter-intuitive, but functional specifications can actually help you go faster.
