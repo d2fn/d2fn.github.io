@@ -60,3 +60,4 @@ As soon as you and your colleagues are comfortable with the specification then f
 Finally, it is tempting to skip many of these suggestions if you are working in a small team or trying to ship something quickly. Adaptations are a good idea in many cases as there is no single, correct way to plan an engineering project. But sincere follow through on functional specifications is a good way to slow the buildup of technical and product debt. This is a major problem which tends to plague teams that are moving fast--for example a startup in their first year. It may seem counter-intuitive, but functional specifications can actually help you go faster.
 
 _Thanks to "Scott Andreas":https://twitter.com/cscotta, "Jeff Hodges":https://twitter.com/jmhodges, "JD Maturen":https://twitter.com/jdmaturen, and "Ted Nyman":https:/twitter.com/tnm for their thoughtful review of this post._
+
