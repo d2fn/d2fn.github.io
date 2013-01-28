@@ -61,3 +61,4 @@ Finally, it is tempting to skip many of these suggestions if you are working in 
 
 _Thanks to "Scott Andreas":https://twitter.com/cscotta, "Jeff Hodges":https://twitter.com/jmhodges, "JD Maturen":https://twitter.com/jdmaturen, and "Ted Nyman":https:/twitter.com/tnm for their thoughtful review of this post._
 
+
