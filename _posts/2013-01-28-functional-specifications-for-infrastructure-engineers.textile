@@ -17,11 +17,9 @@ bq. *Axiom #2: Systems are more likely to break at the interfaces than anywhere 
 
 A functional specification is the artifact of structured thought about an engineering problem which aids in its implementation. Let's talk about what form this should take and why you should go through with it.
 
-
 h2. Why should you write a functional specification?
 
 The primary goal of a functional specification is to profitably prevent many conceptual and design errors from entering the implementation phase of a program or, worse, becoming part of a fully designed program (per axiom #1). Catching these problems early means we can address them more cheaply. During the process, you and your colleagues should also begin to form a clear mental model of the work before it is fully designed.
-
 
 h2. What should be covered in a functional specification?
 
@@ -34,10 +32,10 @@ If the proposed work is required for the advancement of your product or describe
 Describe the inputs and outputs of the system you plan to build. Use diagrams and quality prose. If you later realize you've missed something, it's a good idea to add it and consider it in light of the specification as a whole. Focus here on _what_ the system does and _why_. Avoid discussion of _how_. Don't muddy this part of the discussion with how ZooKeeper will be used or that perstant data will be stored in Riak, for example. Instead focus on orienting yourself and your colleages to the responsibilities of the system. This is where you grease the cognitive wheels and lay a foundation for the rest of the discussion.
 
 *Describe public interfaces*
-If the service exposes a public interface, document its behavior before building it. You’ll need to revisit once the system is fully designed (per axiom #1) but, since this is externally visible behavior, the importance of addressing during specification can't be overstated. If you are describing an HTTP REST API, give attention to each endpoint and its inputs and outputs.
+If the service exposes a public interface, document its behavior before building it. You’ll need to revisit this once the system is fully designed (per axiom #1) but, since this is externally visible behavior, the importance of addressing it during specification can't be overstated. If you are describing an HTTP REST API, give attention to each endpoint and its inputs and outputs.
 
 *Specify messaging and interactions with other services*
-Services rarely run in isolation. With rare exception, your service will interact with one or more other services. A functional specification should describe these interactions. See axiom #2 for why this part of a specification is so important. Be specific. This means documenting both the _syntax_ and the _semantics_ of any messaging between services in addition to the intended transport. Describe what happens in the event of message loss, for example. If you plan to be reliant on HTTP idempotency, say so.
+Services seldom run in isolation. With rare exception, your service will interact with one or more other services. A functional specification should describe these interactions. See axiom #2 for why this part of a specification is so important. Be specific. This means documenting both the _syntax_ and the _semantics_ of any messaging between services in addition to the intended transport. Describe what happens in the event of message loss, for example. If you plan to be reliant on HTTP idempotency, say so.
 
 Specifying these interactions can be tricky because the boundary between _what_ the service does and _how_ it does it blurs. This is normal so don't fret. Just be aware of this fact and choose your words appropriately. It is usually helpful to frame this discussion in terms of the blackbox work done earlier.
 
