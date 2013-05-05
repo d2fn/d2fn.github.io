@@ -4,15 +4,32 @@ title: Dietrich Featherston
 ---
 
 <p>
-<strong>Work: <a href="http://boundary.com/blog/author/dietrich-featherston/">Boundary</a></strong>
+	<strong>Work:</strong>
+	<ul class="posts">
+		<li><a href="https://github.com/blog/1486-dietrich-featherston-is-a-githubber">GitHub (current)</a></li>
+		<li><a href="http://boundary.com/blog/author/dietrich-featherston/">Boundary</a></li>
+		<li><a href="http://issinc.com">ISS</a></li>
+	</ul>
 </p>
 
 <p>
-<strong>Writing:</strong>
+	<strong>Writing:</strong>
+	<ul class="posts">
+		{% for post in site.posts %}
+		<li><a href="{{ post.url }}">{{ post.title }}</a> <span>{{ post.date | date_to_string }}</span></li>
+		{% endfor %}
+	</ul>
 </p>
 
-<ul class="posts">
-  {% for post in site.posts %}
-    <li><a href="{{ post.url }}">{{ post.title }}</a> <span>{{ post.date | date_to_string }}</span></li>
-  {% endfor %}
-</ul>
+<p>
+	<strong>Talks:</strong>
+	<ul class="posts">
+		<li>
+			<p><a href="http://vimeo.com/52398797">RICON2012 - Modern Radiology for Distributed Systems</a></p><iframe src="http://player.vimeo.com/video/52398797" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe> 
+		</li>
+		<li>
+		<p><a href="http://vimeo.com/42902962">Boundary Tech Talks - Large-scale OLAP with Kobayashi</a></p><iframe src="http://player.vimeo.com/video/42902962" width="500" height="281" frameborder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+		</li>
+	</ul>
+</p>
+
