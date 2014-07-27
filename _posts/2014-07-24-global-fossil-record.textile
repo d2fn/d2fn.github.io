@@ -62,7 +62,7 @@ habitatList = fr.habitats.values().sort(function(a, b) { return a.ordinal - b.or
 fr.parse("/data/fr.csv", function(list) {
     var data = fr.applySort(list, fr.comparators[1]);
     chart(d3.select("svg#fossil-record-list"), data.orderedSpeciesList, data.timeline);
-    treerings(600, d3.select("svg#tree-rings"), fr.periodDetails(), fr.habitats);
+    treerings(400, d3.select("svg#tree-rings"), fr.periodDetails(), fr.habitats);
     // var h = fr.habitats.get("F");
     // graph(
     //     fr.makeTree(
