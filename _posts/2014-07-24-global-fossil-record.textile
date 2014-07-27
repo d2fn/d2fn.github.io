@@ -19,6 +19,10 @@ With this idea in mind let's take another look at the breakdown of species count
 
 <svg id="tree-rings" class="centered"/>
 
+Let's look at habitat data yet another way.
+
+<svg id="habitat-graph" class="centered"/>
+
 <style>
   line {
       stroke-width: 1;
@@ -31,6 +35,12 @@ With this idea in mind let's take another look at the breakdown of species count
   }
 
   .label-on {
+      fill: rgb(0, 0, 0, 0.9);
+      font-family: georgia, serif;
+      font-size: 12px;
+  }
+
+  .timeline-habitat-labels {
       fill: rgb(0, 0, 0, 0.9);
       font-family: georgia, serif;
       font-size: 12px;
@@ -63,6 +73,7 @@ fr.parse("/data/fr.csv", function(list) {
     var data = fr.applySort(list, fr.comparators[1]);
     chart(d3.select("svg#fossil-record-list"), data.orderedSpeciesList, data.timeline);
     treerings(400, d3.select("svg#tree-rings"), fr.periodDetails(), fr.habitats);
+    habitatGraph(d3.select("svg#habitat-graph"), fr.periodDetails(), fr.habitats);
     // var h = fr.habitats.get("F");
     // graph(
     //     fr.makeTree(
@@ -334,6 +345,107 @@ function treerings(size, selection, periodDetails, habitats) {
                     });
             }
         });
+}
+
+function habitatGraph(selection, periodDetails, habitats) {
+    var width = 960,
+        height = 75;
+
+    var grid = [];
+
+    colorScale = d3.scale.linear()
+        .domain([0, 1])
+        .range([0.4, 2]);
+
+    var periodDetailsList = d3.map(periodDetails).values()
+        .filter(function(p, i) {
+            return i >= 2;
+        })
+        .sort(function(a, b) {
+            return a.time - b.time;
+        });
+    var habitatList = habitats.values().sort(function(a, b) { return a.count - b.count; });
+    periodDetailsList
+        .forEach(function(p) {
+            var habitatCountsByPeriod = p.habitats;
+            var total = p.total;
+            habitatList.forEach(function(h, i) {
+                console.log(h);
+                var count = habitatCountsByPeriod[h.key];
+                var maxHabitatCountInAnyPeriod = d3.max(periodDetailsList, function(p) {
+                    return p.habitats[h.key];
+                });
+                var alpha = count == 0 ? 0 : colorScale(count/total);
+                grid.push(
+                    {
+                        time: p.time,
+                        habitat: h,
+                        habitatOrder: i,
+                        alpha: alpha,
+                        color:
+                            alpha  == 0
+                                ? "rgba(0, 0, 0, 0.05)"
+                                : "rgba(" + h.color.r + ", " + h.color.g + ", " + h.color.b + ", " + alpha + ")"
+                    }
+                );
+            });
+        });
+
+    var xscale = d3.scale.ordinal()
+        .domain(d3.range(2, d3.max(periodDetailsList, function(p) { return p.time+1; })))
+        .rangeRoundBands([50, width], 0.1);
+
+    var yscale = d3.scale.ordinal()
+        .domain(d3.range(habitatList.length))
+        .rangeRoundBands([0, height], 0.1);
+
+    selection
+        .attr({
+            width: width,
+            height: height
+        });
+
+    selection.append("g")
+        .selectAll("text")
+        .data(habitatList)
+        .enter()
+        .append("text")
+        .text(function(d, i) {
+            return d.name;
+        })
+        .attr("class", "timeline-habitat-labels")
+        .attr("x", 0)
+        .attr("y", function(d, i) {
+            return yscale(i) + yscale.rangeBand() - 2;
+        });
+
+    selection.append("g")
+        .selectAll("rect")
+        .data(grid)
+        .enter()
+        .append("rect")
+        .attr("x", function(d, i) {
+            return xscale(d.time);
+        })
+        .attr("y", function(d, i) {
+            return yscale(d.habitatOrder);
+        })
+        .attr("width", function(d, i) {
+            return xscale.rangeBand();
+        })
+        .attr("height", function(d, i) {
+            return yscale.rangeBand();
+        })
+        .attr("fill", function(d, i) {
+            return d.color;
+        })
+        // .attr("stroke", function(d, i) {
+        //     return "rgba(0, 0, 0, " + (1-d.alpha*0.5) + ")";
+        // })
+        // .attr("stroke-width", function(d, i) {
+        //     return 1;
+        // })
+        ;
 }
 
 </script>
