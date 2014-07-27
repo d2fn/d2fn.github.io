@@ -33,7 +33,7 @@
         }
     });
 
-    var colorScale = colorbrewer.Spectral[habitats.values().length].reverse();
+    var colorScale = colorbrewer.RdYlBu[habitats.values().length].reverse();
 
     habitats.values().forEach(function(h) {
         h.color = d3.rgb(colorScale[h.ordinal]);
