@@ -19,7 +19,7 @@ With this idea in mind let's take another look at the breakdown of species count
 
 <svg id="tree-rings" class="centered"/>
 
-Let's look at habitat data yet another way.
+Let's look at habitat trends another way. The following graph stacks habitats with time extending from left to right--each block describing a geologic time period.
 
 <svg id="habitat-graph" class="centered"/>
 
