@@ -46,10 +46,11 @@ With this idea in mind let's take another look at the breakdown of species count
       font-size: 10px;
   }
 
-  .centered {
-      margin-left: auto;
-      margin-right: auto;
-  }
+    svg.centered {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 
 <script>
