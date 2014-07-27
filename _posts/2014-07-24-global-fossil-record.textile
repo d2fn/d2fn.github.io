@@ -102,7 +102,11 @@ function chart(selection, speciesList, timegrid) {
         .domain(d3.range(fr.periods().length))
         .rangeBands([20, (width - margin.left - margin.right - 90)/columnCount]);
 
-    var svg = selection.attr({width: width, height: height});
+    var svg = selection
+        .attr({
+            width: width,
+            height: height
+        });
 
     var timeG = svg.append("g");
     var divG  = svg.append("g");
