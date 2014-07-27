@@ -1,0 +1,333 @@
+---
+layout: post
+title: "Global Fossil Record: Pt 1"
+---
+
+Sometimes large data sets can be intimidating. I don't mean this in the "big data" sense, but curiosity of a subject area can be frustrating when there exists a large volume of information to consider and you're not really sure where to start. What do you do when nascent curiosity outstrips your ability to ask intelligent questions?
+
+Some time back I came across the <a href="http://paleobiodb.org/cgi-bin/bridge.pl">global fossil record</a>. This includes an account of fossil records for over six thousand species. Specific details include habitat, taxonomy, and data about when the species lived. Historical accounts span from the Hadean <a href="http://en.wikipedia.org/wiki/Precambrian">Precambrian</a> to the current <a href="http://en.wikipedia.org/wiki/Holocene">Holocene</a> period based on the <a href="http://en.wikipedia.org/wiki/Geologic_time_scale">Geologic time scale</a>.
+
+Often times just looking at all the data at once is a great way to get better oriented. The following chart simply lists every species on record with a timeline of its occurrences in each of the geologic time scales color coded by the habitat that species occupies. This isn't a finished visualization. What we're doing here is flooding our visual cortex with data and seeing what patterns stand out.
+
+<svg id="fossil-record-list" class="centered"/>
+
+The chart above takes liberty to order data in a ways that are more likely to be meaningful. For example, ordering species alphabetically was unlikely to be useful so I ordered them by fossil age.  Some obvious patterns begin to emerge.
+
+First of all, at least in terms of number of distinct species we know about, the majority of life on Earth appears to be marine-based. However, this listing makes clear trends towards terrestrial life forms. So far our data agrees with generally held scientific believes on the origin of life so we are off to a good start.
+
+With this idea in min
+
+<svg id="tree-rings" class="centered"/>
+
+<style>
+  line {
+      stroke-width: 1;
+  }
+
+  .label-off {
+      fill: rgb(0, 0, 0, 0.5);
+      font-family: georgia, serif;
+      font-size: 2px;
+  }
+
+  .label-on {
+      fill: rgb(0, 0, 0, 0.9);
+      font-family: georgia, serif;
+      font-size: 12px;
+  }
+
+  line.columndivider {
+      stroke: rgba(0, 0, 0, 0.15);
+  }
+
+  .legendLabel {
+      fill: rgb(0, 0, 0);
+      font-family: georgia, serif;
+      font-size: 10px;
+  }
+
+  .centered {
+      margin-left: auto;
+      margin-right: auto;
+  }
+</style>
+
+<script>
+
+    // get a habitat list in natural order
+    //habitatList = fr.habitats.values().sort(function(a, b) { return a.ordinal - b.ordinal; });
+    habitatList = fr.habitats.values().sort(function(a, b) { return a.ordinal - b.ordinal; });
+
+fr.parse("/data/fr.csv", function(list) {
+    var data = fr.applySort(list, fr.comparators[1]);
+    chart(d3.select("svg#fossil-record-list"), data.orderedSpeciesList, data.timeline);
+    treerings(600, d3.select("svg#tree-rings"), fr.periodDetails(), fr.habitats);
+    // var h = fr.habitats.get("F");
+    // graph(
+    //     fr.makeTree(
+    //         h.name,
+    //         data.orderedSpeciesList
+    //             .filter(function(d) {
+    //                 return d.get("habitat").key == h.key;
+    //             })
+    //         ));
+});
+
+function chart(selection, speciesList, timegrid) {
+    var width        = 960,
+        height       = 500,
+        columnCount  = 8,
+        legendHeight = 8,
+        margin       = {
+            top:    legendHeight + 10, right: 10,
+            bottom: 10,                left:  10
+        };
+
+    var columns = columnLayout(speciesList.length, columnCount);
+
+    var yScale = d3.scale.linear()
+        .domain([0, columns.itemsPerColumn])
+        .range([margin.top, height-margin.bottom]);
+
+    var columnScale = d3.scale.linear()
+        .domain([0, speciesList.length-1])
+        .range([0, columnCount]);
+
+    var columnXScale = d3.scale.ordinal()
+        .domain(d3.range(columnCount))
+        .rangeBands([margin.left, width - margin.right]);
+
+    var timeScale = d3.scale.ordinal()
+        .domain(d3.range(fr.periods().length))
+        .rangeBands([20, (width - margin.left - margin.right - 90)/columnCount]);
+
+    var svg = selection.attr({width: width, height: height});
+
+    var timeG = svg.append("g");
+    var divG  = svg.append("g");
+    var legG  = svg.append("g");
+    var textG = svg.append("g");
+
+    textG.selectAll("text")
+        .data(speciesList)
+        .enter()
+        .append("text")
+        .attr("class", "label-off")
+        .text(function(d, i) {
+            return d.get("family");
+        })
+        .attr("x", function(d, i) {
+            var column = columns.column(i);
+            return margin.left + column*columnXScale.rangeBand();
+        })
+        .attr("y", function(d, i) {
+            return yScale(columns.indexInColumn(i));
+        })
+        .on("mouseover", function(d, i) {
+            d3.select(this).attr("class", "label-on");
+        })
+        .on("mouseout", function(d, i) {
+            d3.select(this).attr("class", "label-off");
+        });
+
+    timeG.selectAll("line")
+        .data(timegrid)
+        .enter()
+        .append("line")
+        .attr("x1", function(d, i) {
+            var column = columns.column(d.get("speciesIndex"));
+            return columnXScale(column) + timeScale(d.get("time"));
+        })
+        .attr("y1", function(d, i) {
+            var itemIndex = columns.indexInColumn(d.get("speciesIndex"));
+            return yScale(itemIndex);
+        })
+        .attr("x2", function(d, i) {
+            var column = columns.column(d.get("speciesIndex"));
+            return columnXScale(column) + timeScale(d.get("time")) + timeScale.rangeBand();
+        })
+        .attr("y2", function(d, i) {
+            var itemIndex = columns.indexInColumn(d.get("speciesIndex"));
+            return yScale(itemIndex);
+        })
+        .attr("stroke", function(d, i) {
+            var h = d.get("parent").get("habitat");
+            return h.color.toString();
+        })
+        .attr("class", function(d, i) {
+            var h = d.get("parent").get("habitat");
+            return "habitat-" + h.key;
+        });
+
+    var dividers = d3.range(columns).filter(function(n) { return n > 0; });
+    divG.selectAll("line")
+        .data(dividers)
+        .enter()
+        .append("line")
+        .attr("class","columndivider")
+        .attr("x1", function(n) {
+            return columnXScale(n) - (columnXScale(0)*(4/columns));
+        })
+        .attr("y1", function(n) {
+            return 0.9*margin.top;
+        })
+        .attr("x2", function(n) {
+            return columnXScale(n) - (columnXScale(0)*(4/columns));
+        })
+        .attr("y2", function(n) {
+            return height - 0.5*margin.bottom;
+        });
+
+    var legendScale = d3.scale.ordinal()
+        .domain(d3.range(habitatList.length))
+        .rangeBands([margin.left, width/2 - margin.right]);
+
+    legG.selectAll("rect")
+        .data(habitatList)
+        .enter()
+        .append("rect")
+        .attr("fill", function(d, i) {
+            return d.color.toString();
+        })
+        .attr("x", function(d, i) {
+            return legendScale(d.ordinal);
+        })
+        .attr("y", 0)
+        .attr("width", legendHeight)
+        .attr("height", legendHeight)
+        .on("mouseover", function(d, i) {
+            timeG.selectAll("line")
+                .attr("stroke", "rgba(0, 0, 0, 0.05)");
+            timeG.selectAll("line.habitat-" + d.key)
+                .attr("stroke", d.color.toString());
+        })
+        .on("mouseout", function() {
+            timeG.selectAll("line")
+                .attr("stroke", function(d, i) {
+                    return d.get("parent").get("habitat").color.toString();
+                });
+        })
+
+    legG.selectAll("text")
+        .data(habitatList)
+        .enter()
+        .append("text")
+        .attr("x", function(d, i) {
+            return legendScale(i) + legendHeight + 2;
+        })
+        .attr("y", legendHeight)
+        .attr("class", "legendLabel")
+        .text(function(d, i) {
+            return d.name;
+        });
+}
+
+function columnLayout(itemCount, columnCount) {
+    var itemsPerColumn = Math.ceil(itemCount/columnCount)
+    return {
+        itemsPerColumn: itemsPerColumn,
+        column: function(i) {
+            return Math.floor(i/itemsPerColumn);
+        },
+        indexInColumn: function(i) {
+            return i % itemsPerColumn;
+        }
+    }
+}
+
+function treerings(size, selection, periodDetails, habitats) {
+
+    var arcdata = [];
+    var periodDetailsMap = d3.map(periodDetails);
+    var periodDetailsList = periodDetailsMap.values()
+        .sort(function(a, b) { return a.time - b.time;});
+    var maxTotal = d3.max(periodDetailsList, function(p) { return Math.max(1, p.total); });
+    var habitatList = habitats.values().sort(function(a, b) { return a.count - b.count; });
+    periodDetailsList
+        .forEach(function(p) {
+            habitatList.forEach(function(h, i) {
+                var total = p.total > 0 ? p.total : 1;
+                var pct = p.habitats[h.key]/total;
+                if(i == 0) {
+                    var size = 2*Math.PI*p.habitats[h.key]/total;
+                    var startAngle = 0;
+                    arcdata.push({
+                        era: p.name,
+                        time: p.time,
+                        startAngle: startAngle,
+                        endAngle: startAngle + size,
+                        color: h.color,
+                        pct: pct
+                    });
+                }
+                else {
+                    var theta0 = arcdata[arcdata.length-1].endAngle;
+                    arcdata.push({
+                        era: p.name,
+                        time: p.time,
+                        startAngle: theta0,
+                        endAngle: theta0 + 2*Math.PI*p.habitats[h.key]/total,
+                        color: h.color,
+                        pct: pct
+                    });
+                }
+            });
+        });
+
+    var rscale = d3.scale.linear()
+        .domain([2, periodDetailsList.length])
+        .range([0, (size-10)/2]);
+
+    var arc = d3.svg.arc()
+        .startAngle(function(d, i) {
+            return d.startAngle;
+        })
+        .endAngle(function(d, i) {
+            return d.endAngle;
+        })
+        .innerRadius(function(d, i) {
+            return rscale(d.time);
+        })
+        .outerRadius(function(d, i) {
+            return rscale(d.time) + 3;
+        });
+
+    var rings = selection
+        .attr("class", "chart")
+        .attr("width", 960)
+        .attr("height", size)
+        .append("svg:g")
+        .attr("transform", "translate(" + size/2 + ", " + size/2 + ")rotate(-90)");
+
+    rings.selectAll("path")
+        .data(arcdata)
+        .enter().append("svg:path")
+        .style("fill", function(d, i){
+            return d.color;
+        })
+        .attr("d", arc)
+        .on("mouseover", function(d, i) {
+            var ra = rscale(d.time);
+            rings.selectAll("path")
+                .style("fill", function(e, j) {
+                    var c = e.color;
+                    var rb = rscale(e.time);
+                    if(rb > ra) {
+                        return "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.1)";
+                    }
+                    else {
+                        return c;
+                    }
+                });
+        })
+        .on("mouseout", function(d, i) {
+            if(d.time >= periodDetailsList.length-1) {
+                rings.selectAll("path")
+                    .style("fill", function(d, i){
+                        return d.color;
+                    });
+            }
+        });
+}
+
+</script>
