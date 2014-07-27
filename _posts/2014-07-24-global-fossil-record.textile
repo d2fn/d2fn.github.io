@@ -294,13 +294,14 @@ function treerings(size, selection, periodDetails, habitats) {
             return rscale(d.time);
         })
         .outerRadius(function(d, i) {
-            return rscale(d.time) + 3;
+            return rscale(d.time) + ((size*0.8)/2)/periodDetailsList.length;
         });
 
     var rings = selection
-        .attr("class", "chart")
-        .attr("width", 960)
-        .attr("height", size)
+        .attr({
+            width: size,
+            height: size
+        })
         .append("svg:g")
         .attr("transform", "translate(" + size/2 + ", " + size/2 + ")rotate(-90)");
 
