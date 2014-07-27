@@ -55,9 +55,9 @@ With this idea in mind let's take another look at the breakdown of species count
 
 <script>
 
-    // get a habitat list in natural order
-    //habitatList = fr.habitats.values().sort(function(a, b) { return a.ordinal - b.ordinal; });
-    habitatList = fr.habitats.values().sort(function(a, b) { return a.ordinal - b.ordinal; });
+// get a habitat list in natural order
+//habitatList = fr.habitats.values().sort(function(a, b) { return a.ordinal - b.ordinal; });
+habitatList = fr.habitats.values().sort(function(a, b) { return a.ordinal - b.ordinal; });
 
 fr.parse("/data/fr.csv", function(list) {
     var data = fr.applySort(list, fr.comparators[1]);
