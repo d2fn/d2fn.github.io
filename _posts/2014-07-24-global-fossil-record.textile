@@ -384,7 +384,7 @@ function habitatGraph(selection, periodDetails, habitats) {
                         alpha: alpha,
                         color:
                             alpha  == 0
-                                ? "rgba(0, 0, 0, 0.05)"
+                                ? "rgba(0, 0, 0, 0.05)" // show zero data as gray
                                 : "rgba(" + h.color.r + ", " + h.color.g + ", " + h.color.b + ", " + alpha + ")"
                     }
                 );
