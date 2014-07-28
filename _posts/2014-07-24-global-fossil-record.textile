@@ -73,9 +73,32 @@ habitatList = fr.habitats.values().sort(function(a, b) { return a.ordinal - b.or
 
 fr.parse("/data/fr.csv", function(list) {
     var data = fr.applySort(list, fr.comparators[1]);
-    chart(d3.select("svg#fossil-record-list"), data.orderedSpeciesList, data.timeline);
-    treerings(400, d3.select("svg#tree-rings"), fr.periodDetails(), fr.habitats);
-    habitatGraph(d3.select("svg#habitat-graph"), fr.periodDetails(), fr.habitats);
+
+    var chartSelection = d3.select("svg#fossil-record-list");
+    var treeRingSelection = d3.select("svg#tree-rings");
+    var habitatGraphSelection = d3.select("svg#habitat-graph");
+
+    var chartContext = {
+            selection: chartSelection
+        },
+        treeRingContext = {
+            selection: treeRingSelection
+        },
+        habitatGraphContext = {
+            selection: habitatGraphSelection
+        },
+        sync = {
+            context: [ chartContext, treeRingContext, habitatGraphContext ],
+            selectTime: function(source, times) {
+                this.context.forEach(function(c) {
+                    c.selectTime(times);
+                });
+            }
+        };
+
+    chart(chartContext, data.orderedSpeciesList, data.timeline);
+    treerings(treeRingContext, fr.periodDetails(), fr.habitats, 400, sync);
+    habitatGraph(habitatGraphContext, fr.periodDetails(), fr.habitats, sync);
     // var h = fr.habitats.get("F");
     // graph(
     //     fr.makeTree(
