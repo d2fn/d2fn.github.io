@@ -110,11 +110,12 @@ fr.parse("/data/fr.csv", function(list) {
     //         ));
 });
 
-function chart(selection, speciesList, timegrid) {
+function chart(context, speciesList, timegrid) {
     var width        = 960,
         height       = 500,
         columnCount  = 8,
         legendHeight = 8,
+        selection    = context.selection,
         margin       = {
             top:    legendHeight + 10, right: 10,
             bottom: 10,                left:  10
@@ -261,6 +262,10 @@ function chart(selection, speciesList, timegrid) {
         .text(function(d, i) {
             return d.name;
         });
+
+    context.selectTime = function(times) {
+        console.log("selecting " + times.join(",") + " on main list chart");
+    };
 }
 
 function columnLayout(itemCount, columnCount) {
@@ -276,7 +281,7 @@ function columnLayout(itemCount, columnCount) {
     }
 }
 
-function treerings(size, selection, periodDetails, habitats) {
+function treerings(context, periodDetails, habitats, size, sync) {
 
     var arcdata = [];
     var periodDetailsMap = d3.map(periodDetails);
@@ -298,6 +303,7 @@ function treerings(size, selection, periodDetails, habitats) {
                         startAngle: startAngle,
                         endAngle: startAngle + size,
                         color: h.color,
+                        habitatKey: h.key,
                         pct: pct
                     });
                 }
@@ -309,6 +315,7 @@ function treerings(size, selection, periodDetails, habitats) {
                         startAngle: theta0,
                         endAngle: theta0 + 2*Math.PI*p.habitats[h.key]/total,
                         color: h.color,
+                        habitatKey: h.key,
                         pct: pct
                     });
                 }
@@ -330,16 +337,88 @@ function treerings(size, selection, periodDetails, habitats) {
             return rscale(d.time);
         })
         .outerRadius(function(d, i) {
-            return rscale(d.time) + ((size*0.8)/2)/periodDetailsList.length;
+            return rscale(d.time) + 2.5;
         });
 
-    var rings = selection
+    var piearc = d3.svg.arc();
+
+    context.selection
         .attr({
-            width: size,
+            width: size*2.2,
             height: size
-        })
+        });
+
+    var rings = context.selection
         .append("svg:g")
         .attr("transform", "translate(" + size/2 + ", " + size/2 + ")rotate(-90)");
+
+    var emptySelectionData = [{
+            innerRadius: rscale.range()[0],
+            outerRadius: rscale.range()[1],
+            startAngle: 0,
+            endAngle: 2*Math.PI,
+            color: "rgba(0, 0, 0, 0.1)"
+        }];
+
+    var pie = context.selection
+        .append("svg:g")
+        .attr("transform", "translate(" + (3*size/2) + ", " + size/2 + ")rotate(-90)");
+
+    // pie.
+    //     .selectAll("path")
+    //     .data([{
+    //         innerRadius: rscale.range()[0],
+    //         outerRadius: rscale.range()[1],
+    //         startAngle: 0,
+    //         endAngle: 2*Math.PI,
+    //         color: "rgba(0, 0, 0, 0.1)"
+    //     }]
+    //     .enter()
+    //     .append("path")
+    //     .style("fill", function(d) { return d.color; })
+    //     .attr("d", piearc);
+
+    context.selectTime = function(times) {
+        rings.selectAll("path")
+            .style("fill", function(e, j) {
+                var c = e.color;
+                if(times.indexOf(e.time) != -1) {
+                    return c;
+                }
+                else {
+                    return "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.1)";
+                }
+            });
+        var maxTime = d3.max(times);
+        var period = periodDetailsList[maxTime];
+        var data = [];
+        habitatList.forEach(function(h) {
+            var count = period.habitats[h.key];
+            var total = period.total;
+            var pct = count/total;
+            var arcLength = 2*Math.PI*pct;
+            var startAngle = (data.length == 0 ? 0 : data[data.length-1].endAngle);
+            data.push({
+                key: h.key + "-" + maxTime,
+                innerRadius: size/10,
+                outerRadius: size/3,
+                startAngle: startAngle,
+                endAngle: startAngle + arcLength,
+                color: h.color
+            });
+        });
+        var spie = pie.selectAll("path")
+            .data(data, function(d) {
+                return d.key;
+            });
+        spie.exit().remove();
+        spie.enter()
+            .append("path")
+            .attr("d", piearc)
+            .style("fill", function(d) {
+                return d.color;
+            });
+    };
 
     rings.selectAll("path")
         .data(arcdata)
@@ -347,32 +426,19 @@ function treerings(size, selection, periodDetails, habitats) {
         .style("fill", function(d, i){
             return d.color;
         })
+        .attr("class", function(d, i) {
+            return "habitat-at-time,habitat-" + d.habitatKey + ",period-" + d.time;
+        })
         .attr("d", arc)
         .on("mouseover", function(d, i) {
-            var ra = rscale(d.time);
-            rings.selectAll("path")
-                .style("fill", function(e, j) {
-                    var c = e.color;
-                    var rb = rscale(e.time);
-                    if(rb > ra) {
-                        return "rgba(" + c.r + ", " + c.g + ", " + c.b + ", 0.1)";
-                    }
-                    else {
-                        return c;
-                    }
-                });
+            sync.selectTime(context, d3.range(0, d.time+1));
         })
         .on("mouseout", function(d, i) {
-            if(d.time >= periodDetailsList.length-1) {
-                rings.selectAll("path")
-                    .style("fill", function(d, i){
-                        return d.color;
-                    });
-            }
+            sync.selectTime(context, d3.range(0, periodDetailsList[periodDetailsList.length-1].time));
         });
 }
 
-function habitatGraph(selection, periodDetails, habitats) {
+function habitatGraph(context, periodDetails, habitats, sync) {
     var width = 960,
         height = 75;
 
@@ -380,7 +446,7 @@ function habitatGraph(selection, periodDetails, habitats) {
 
     colorScale = d3.scale.linear()
         .domain([0, 1])
-        .range([0.4, 2]);
+        .range([0.1, 1]);
 
     var periodDetailsList = d3.map(periodDetails).values()
         .filter(function(p, i) {
@@ -395,16 +461,18 @@ function habitatGraph(selection, periodDetails, habitats) {
             var habitatCountsByPeriod = p.habitats;
             var total = p.total;
             habitatList.forEach(function(h, i) {
-                console.log(h);
                 var count = habitatCountsByPeriod[h.key];
                 var maxHabitatCountInAnyPeriod = d3.max(periodDetailsList, function(p) {
                     return p.habitats[h.key];
                 });
-                var alpha = count == 0 ? 0 : colorScale(count/total);
+                var maxPeriodCountForAnyHabitat = d3.max(d3.map(habitatCountsByPeriod).values());
+                var alpha = count == 0 ? 0 : colorScale(count/maxPeriodCountForAnyHabitat);
+                // var alpha = count == 0 ? 0 : colorScale(count/total);
                 grid.push(
                     {
                         time: p.time,
                         habitat: h,
+                        habitatKey: h.key,
                         habitatOrder: i,
                         alpha: alpha,
                         color:
@@ -416,21 +484,23 @@ function habitatGraph(selection, periodDetails, habitats) {
             });
         });
 
+    var periodRange = d3.range(2, d3.max(periodDetailsList, function(p) { return p.time+1; }));
+
     var xscale = d3.scale.ordinal()
-        .domain(d3.range(2, d3.max(periodDetailsList, function(p) { return p.time+1; })))
+        .domain(periodRange)
         .rangeRoundBands([50, width], 0.1);
 
     var yscale = d3.scale.ordinal()
         .domain(d3.range(habitatList.length))
         .rangeRoundBands([0, height], 0.1);
 
-    selection
+    context.selection
         .attr({
             width: width,
             height: height
         });
 
-    selection.append("g")
+    context.selection.append("g")
         .selectAll("text")
         .data(habitatList)
         .enter()
@@ -444,33 +514,57 @@ function habitatGraph(selection, periodDetails, habitats) {
             return yscale(i) + yscale.rangeBand() - 2;
         });
 
-    selection.append("g")
-        .selectAll("rect")
+    var gridRects = context.selection.append("g");
+    var periodRects = context.selection.append("g");
+
+    periodRects.selectAll("rect")
+        .data(periodDetailsList)
+        .enter()
+        .append("rect")
+        .attr("fill", "rgba(255, 255, 255, 0.0)")
+        .attr("x", function(d) {
+            return xscale(d.time);
+        })
+        .attr("y", yscale(0))
+        .attr("width", xscale.rangeBand())
+        .attr("height", yscale.range()[yscale.range().length-1] - yscale.range()[0] + yscale.rangeBand())
+        .on("mouseover", function(d) {
+            sync.selectTime(context, [d.time]);
+        })
+        .on("mouseout", function(d, i) {
+            sync.selectTime(context, periodRange);
+        });       
+
+    gridRects.selectAll("rect")
         .data(grid)
         .enter()
         .append("rect")
+        .attr("class", function(d, i) {
+            return "habitat-at-time,habitat-" + d.habitatKey + ",period-" + d.time;
+        })
         .attr("x", function(d, i) {
             return xscale(d.time);
         })
         .attr("y", function(d, i) {
             return yscale(d.habitatOrder);
         })
-        .attr("width", function(d, i) {
-            return xscale.rangeBand();
-        })
-        .attr("height", function(d, i) {
-            return yscale.rangeBand();
-        })
+        .attr("width", xscale.rangeBand())
+        .attr("height", yscale.rangeBand())
         .attr("fill", function(d, i) {
             return d.color;
-        })
-        // .attr("stroke", function(d, i) {
-        //     return "rgba(0, 0, 0, " + (1-d.alpha*0.5) + ")";
-        // })
-        // .attr("stroke-width", function(d, i) {
-        //     return 1;
-        // })
-        ;
+        });
+
+    context.selectTime = function(times) {
+        periodRects.selectAll("rect")
+            .attr("fill", function(d, i) {
+                var alpha = 0.9;
+                // select this time, so don't obscure with overlay
+                if(times.indexOf(d.time) != -1) {
+                    alpha = 0;
+                }
+                return "rgba(255, 255, 255, " + alpha + ")";
+            })
+    };
 }
 
 </script>
