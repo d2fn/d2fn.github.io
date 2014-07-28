@@ -15,13 +15,15 @@ The chart above takes liberty to order data in a ways that are more likely to be
 
 First of all, at least in terms of number of distinct species we know about, the majority of life on Earth appears to be marine-based. However, this listing makes clear trends towards terrestrial life forms. So far our visuals agree with generally held scientific believe that life arose from the oceans and later moved onto the land.
 
-With this idea in mind let's take another look at the breakdown of species count by habitat over time. The following circular chart can be thought of as reading the rings of a tree. The earliest time period is in the center with the current time period represented by the outer most ring. The size of each color represents the percentage of species occupying that habitat at that time. Hover over a ring to focus on only on that time period and prior.
+With this idea in mind let's take another look at the breakdown of species count by habitat over time in a simple grid.
+
+<svg id="habitat-graph" class="centered"/>
+
+The following circular chart displays the same information in a different way. It can be thought of as reading the rings of a tree. The earliest time period is in the center with the current time period represented by the outer most ring. The size of each color represents the percentage of species occupying that habitat at that time. Hover over a ring to focus on only on that time period and prior.
 
 <svg id="tree-rings" class="centered"/>
 
-Let's look at habitat trends another way. The following graph stacks habitats with time extending from left to right--each block describing a geologic time period.
-
-<svg id="habitat-graph" class="centered"/>
+Hover any time period in the above charts and they will all orient themselves to the same time period.
 
 <style>
   line {
