@@ -279,6 +279,46 @@
 
                 return makeNode(null, nest);
             },
+        cross: function(speciesList, args) {
+            var agg = d3.map({}),
+                max = 0;
+            speciesList.forEach(function(s) {
+                var xval = args.xfun(s),
+                    yval = args.yfun(s),
+                    key  = xval + ":" + yval,
+                    cell = {
+                        x: xval,
+                        y: yval,
+                        count: 0
+                    };
+                if(xval && yval) {
+                    if(agg.has(key)) {
+                        cell = agg.get(key);
+                    }
+                    else {
+                        agg.set(key, cell);
+                    }
+                    cell.count++;
+                    max = d3.max([cell.count, max]);
+                }
+            });
+            return {
+                data: agg.values(),
+                xdomain: d3.set(
+                    agg.values()
+                    .map(function(d) {
+                        return d.x;
+                    })).values()
+                    .sort(args.xsort),
+                ydomain: d3.set(
+                    agg.values()
+                    .map(function(d) { 
+                        return d.y;
+                    })).values()
+                    .sort(args.ysort),
+                max: max
+            };
+        },
         comparators: [
             {
                 name: "By Habitat",
