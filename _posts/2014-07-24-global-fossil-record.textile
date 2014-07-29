@@ -3,6 +3,46 @@ layout: post
 title: "Global Fossil Record: Pt 1"
 ---
 
+<style>
+  line {
+      stroke-width: 1;
+  }
+
+  .label-off {
+      fill: rgb(0, 0, 0, 0.5);
+      font-family: georgia, serif;
+      font-size: 2px;
+  }
+
+  .label-on {
+      fill: rgb(0, 0, 0, 0.9);
+      font-family: georgia, serif;
+      font-size: 12px;
+  }
+
+  .small-label {
+      fill: rgb(0, 0, 0, 0.9);
+      font-family: georgia, serif;
+      font-size: 12px;
+  }
+
+  line.columndivider {
+      stroke: rgba(0, 0, 0, 0.15);
+  }
+
+  .legendLabel {
+      fill: rgb(0, 0, 0);
+      font-family: georgia, serif;
+      font-size: 10px;
+  }
+
+    svg.centered {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+
 Sometimes large data sets can be intimidating. I don't mean this in the "big data" sense, but curiosity of a subject area can be frustrating when there exists a large volume of information to consider and you're not really sure where to start. What do you do when nascent curiosity outstrips your ability to ask intelligent questions?
 
 Some time back I came across the <a href="http://paleobiodb.org/cgi-bin/bridge.pl">global fossil record</a>. This includes an account of fossil records for over six thousand species. Specific details include habitat, taxonomy, and data about when the species lived. Historical accounts span from the Hadean <a href="http://en.wikipedia.org/wiki/Precambrian">Precambrian</a> to the current <a href="http://en.wikipedia.org/wiki/Holocene">Holocene</a> period based on the <a href="http://en.wikipedia.org/wiki/Geologic_time_scale">Geologic time scale</a>.
@@ -25,45 +65,7 @@ The following circular chart displays the same information in a different way. I
 
 Hover any time period in the above charts and they will all orient themselves to the same time period.
 
-<style>
-  line {
-      stroke-width: 1;
-  }
-
-  .label-off {
-      fill: rgb(0, 0, 0, 0.5);
-      font-family: georgia, serif;
-      font-size: 2px;
-  }
-
-  .label-on {
-      fill: rgb(0, 0, 0, 0.9);
-      font-family: georgia, serif;
-      font-size: 12px;
-  }
-
-  .timeline-habitat-labels {
-      fill: rgb(0, 0, 0, 0.9);
-      font-family: georgia, serif;
-      font-size: 12px;
-  }
-
-  line.columndivider {
-      stroke: rgba(0, 0, 0, 0.15);
-  }
-
-  .legendLabel {
-      fill: rgb(0, 0, 0);
-      font-family: georgia, serif;
-      font-size: 10px;
-  }
-
-    svg.centered {
-        display: block;
-        margin-left: auto;
-        margin-right: auto;
-    }
-</style>
+<svg id="class-habitats" class="centered"/>
 
 <script>
 
