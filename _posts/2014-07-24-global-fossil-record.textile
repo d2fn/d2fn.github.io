@@ -109,19 +109,20 @@ fr.parse("/data/fr.csv", function(list) {
     var classByHabitat =
         fr.cross(data.orderedSpeciesList,
             {
-                yfun: 
-                    function(s) {
-                        return s.get("phylum");
-                    },
                 xfun:
                     function(s) {
                         return s.get("habitat").key;
                     },
-                ysort: d3.ascending,
+                yfun: 
+                    function(s) {
+                        return s.get("phylum");
+                    },
                 xsort: 
                     function(a, b) {
                         return fr.habitats.get(a).ordinal - fr.habitats.get(b).ordinal;
-                    }
+                    },
+                ysort:
+                    d3.ascending
             });
 
     classHabitatsGraph(classHabitatsContext, classByHabitat);
@@ -597,7 +598,7 @@ function habitatGraph(context, periodDetails, habitats, sync) {
 function classHabitatsGraph(context, data) {
 
     var width = 200,
-        height = 750;
+        height = 14 * data.ydomain.length;
 
     context.selection.attr({
         width: width,
@@ -626,7 +627,7 @@ function classHabitatsGraph(context, data) {
         .attr("class", "small-label")
         .attr("x", 0)
         .attr("y", function(d, i) {
-            return yscale(i) + yscale.rangeBand() - 2;
+            return yscale(i) + yscale.rangeBand()/2;
         });
 
     var grid = context.selection.append("g");
