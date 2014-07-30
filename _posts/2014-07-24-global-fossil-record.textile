@@ -311,7 +311,7 @@ function columnLayout(itemCount, columnCount) {
 
 function habitatGraph(context, periodDetails, habitats, sync) {
     var width = 960,
-        height = 75;
+        height = 80;
 
     var grid = [];
 
@@ -371,20 +371,6 @@ function habitatGraph(context, periodDetails, habitats, sync) {
             height: height
         });
 
-    context.selection.append("g")
-        .selectAll("text")
-        .data(habitatList)
-        .enter()
-        .append("text")
-        .text(function(d, i) {
-            return d.name;
-        })
-        .attr("class", "small-label")
-        .attr("x", 0)
-        .attr("y", function(d, i) {
-            return yscale(i) + yscale.rangeBand() - 2;
-        });
-
     var gridRects = context.selection.append("g");
     var periodRects = context.selection.append("g");
 
@@ -423,6 +409,20 @@ function habitatGraph(context, periodDetails, habitats, sync) {
         .attr("height", yscale.rangeBand())
         .attr("fill", function(d, i) {
             return d.color;
+        });
+
+    context.selection.append("g")
+        .selectAll("text")
+        .data(habitatList)
+        .enter()
+        .append("text")
+        .text(function(d, i) {
+            return d.name;
+        })
+        .attr("class", "small-label")
+        .attr("x", 0)
+        .attr("y", function(d, i) {
+            return yscale(i) + yscale.rangeBand()/2 + 3;
         });
 
     context.selectTime = function(times) {
