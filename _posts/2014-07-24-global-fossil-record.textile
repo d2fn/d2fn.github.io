@@ -63,7 +63,7 @@ The following circular chart displays the same information in a different way. I
 
 <svg id="tree-rings" class="centered"/>
 
-Hover any time period in the above charts and they will all orient themselves to the same time period.
+As you hover over the above charts and they will all orient themselves to the same time period.
 
 <svg id="class-habitats" class="centered"/>
 
@@ -126,6 +126,17 @@ fr.parse("/data/fr.csv", function(list) {
             });
 
     classHabitatsGraph(classHabitatsContext, classByHabitat);
+
+    var phylumTimeline =
+        fr.timelineRollup(data.orderedSpeciesList,
+            {
+                yfun:
+                    function(s) {
+                        return s.get("phylum");
+                    }
+            });
+
+    console.log(phylumTimeline);
 
     // var h = fr.habitats.get("F");
     // graph(
@@ -605,8 +616,6 @@ function classHabitatsGraph(context, data) {
         height: height
     });
 
-    console.log(data);
-
     var xscale = d3.scale.ordinal()
         .domain(d3.range(data.xdomain.length))
         .rangeRoundBands([120, width], 0.05);
@@ -638,7 +647,6 @@ function classHabitatsGraph(context, data) {
         .append("rect")
         .attr("fill", function(d) {
             var c = fr.habitats.get(d.x).color;
-            console.log([d.y, d]);
             var max = d3.max(data.data.filter(function(e) { return e.y == d.y }).map(function(e) { return e.count }));
             return "rgba(" + c.r + ", " + c.g + ", " + c.b + ", " + d.count/max + ")";
         })

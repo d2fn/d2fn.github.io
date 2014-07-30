@@ -319,6 +319,42 @@
                 max: max
             };
         },
+        timelineRollup: function(speciesList, args) {
+            var agg = d3.map({});
+            speciesList.forEach(function(s) {
+                var yval = args.yfun(s);
+                if(yval) {
+                    var timeline = s.get("timeline").map(function(t, i) {
+                        return t.get("time");
+                    });
+                    var cell = {};
+                    if(agg.has(yval)) {
+                        cell = agg.get(yval);
+                        timeline.forEach(function(t) {
+                            cell.max = d3.max([cell.max, ++cell.timeline[t]]);
+                        });
+                    }
+                    else {
+                        cell.timeline =
+                            periods.map(function(p, i) {
+                                if(timeline.indexOf(i) == -1) {
+                                    return 0;
+                                }
+                                else {
+                                    cell.max = 1;
+                                    return 1;
+                                }
+                            });
+                        cell.key = yval;
+                        agg.set(yval, cell);
+                    }
+                }
+            });
+            return {
+                max: d3.max(agg.values(), function(d) { return d.max; }),
+                data: agg.values()
+            }
+        },
         comparators: [
             {
                 name: "By Habitat",
