@@ -309,6 +309,135 @@ function columnLayout(itemCount, columnCount) {
     }
 }
 
+function habitatGraph(context, periodDetails, habitats, sync) {
+    var width = 960,
+        height = 75;
+
+    var grid = [];
+
+    colorScale = d3.scale.linear()
+        .domain([0, 1])
+        .range([0.1, 1]);
+
+    var periodDetailsList = d3.map(periodDetails).values()
+        .filter(function(p, i) {
+            return i >= 2;
+        })
+        .sort(function(a, b) {
+            return a.time - b.time;
+        });
+    var habitatList = habitats.values().sort(function(a, b) { return a.count - b.count; });
+    periodDetailsList
+        .forEach(function(p) {
+            var habitatCountsByPeriod = p.habitats;
+            var total = p.total;
+            habitatList.forEach(function(h, i) {
+                var count = habitatCountsByPeriod[h.key];
+                var maxHabitatCountInAnyPeriod = d3.max(periodDetailsList, function(p) {
+                    return p.habitats[h.key];
+                });
+                var maxPeriodCountForAnyHabitat = d3.max(d3.map(habitatCountsByPeriod).values());
+                var alpha = count == 0 ? 0 : colorScale(count/maxPeriodCountForAnyHabitat);
+                // var alpha = count == 0 ? 0 : colorScale(count/total);
+                grid.push(
+                    {
+                        time: p.time,
+                        habitat: h,
+                        habitatKey: h.key,
+                        habitatOrder: i,
+                        alpha: alpha,
+                        color:
+                            alpha  == 0
+                                ? "rgba(0, 0, 0, 0.05)" // show zero data as gray
+                                : "rgba(" + h.color.r + ", " + h.color.g + ", " + h.color.b + ", " + alpha + ")"
+                    }
+                );
+            });
+        });
+
+    var periodRange = d3.range(2, d3.max(periodDetailsList, function(p) { return p.time+1; }));
+
+    var xscale = d3.scale.ordinal()
+        .domain(periodRange)
+        .rangeRoundBands([50, width], 0.1);
+
+    var yscale = d3.scale.ordinal()
+        .domain(d3.range(habitatList.length))
+        .rangeRoundBands([0, height], 0.1);
+
+    context.selection
+        .attr({
+            width: width,
+            height: height
+        });
+
+    context.selection.append("g")
+        .selectAll("text")
+        .data(habitatList)
+        .enter()
+        .append("text")
+        .text(function(d, i) {
+            return d.name;
+        })
+        .attr("class", "small-label")
+        .attr("x", 0)
+        .attr("y", function(d, i) {
+            return yscale(i) + yscale.rangeBand() - 2;
+        });
+
+    var gridRects = context.selection.append("g");
+    var periodRects = context.selection.append("g");
+
+    periodRects.selectAll("rect")
+        .data(periodDetailsList)
+        .enter()
+        .append("rect")
+        .attr("fill", "rgba(255, 255, 255, 0.0)")
+        .attr("x", function(d) {
+            return xscale(d.time);
+        })
+        .attr("y", yscale(0))
+        .attr("width", xscale.rangeBand())
+        .attr("height", yscale.range()[yscale.range().length-1] - yscale.range()[0] + yscale.rangeBand())
+        .on("mouseover", function(d) {
+            sync.selectTime(context, [d.time]);
+        })
+        .on("mouseout", function(d, i) {
+            sync.selectTime(context, periodRange);
+        });       
+
+    gridRects.selectAll("rect")
+        .data(grid)
+        .enter()
+        .append("rect")
+        .attr("class", function(d, i) {
+            return "habitat-at-time,habitat-" + d.habitatKey + ",period-" + d.time;
+        })
+        .attr("x", function(d, i) {
+            return xscale(d.time);
+        })
+        .attr("y", function(d, i) {
+            return yscale(d.habitatOrder);
+        })
+        .attr("width", xscale.rangeBand())
+        .attr("height", yscale.rangeBand())
+        .attr("fill", function(d, i) {
+            return d.color;
+        });
+
+    context.selectTime = function(times) {
+        periodRects.selectAll("rect")
+            .attr("fill", function(d, i) {
+                var alpha = 0.9;
+                // select this time, so don't obscure with overlay
+                if(times.indexOf(d.time) != -1) {
+                    alpha = 0;
+                }
+                return "rgba(255, 255, 255, " + alpha + ")";
+            })
+    };
+}
+
 function treerings(context, periodDetails, habitats, size, sync) {
 
     var arcdata = [];
@@ -464,135 +593,6 @@ function treerings(context, periodDetails, habitats, size, sync) {
         .on("mouseout", function(d, i) {
             sync.selectTime(context, d3.range(0, periodDetailsList[periodDetailsList.length-1].time));
         });
-}
-
-function habitatGraph(context, periodDetails, habitats, sync) {
-    var width = 960,
-        height = 75;
-
-    var grid = [];
-
-    colorScale = d3.scale.linear()
-        .domain([0, 1])
-        .range([0.1, 1]);
-
-    var periodDetailsList = d3.map(periodDetails).values()
-        .filter(function(p, i) {
-            return i >= 2;
-        })
-        .sort(function(a, b) {
-            return a.time - b.time;
-        });
-    var habitatList = habitats.values().sort(function(a, b) { return a.count - b.count; });
-    periodDetailsList
-        .forEach(function(p) {
-            var habitatCountsByPeriod = p.habitats;
-            var total = p.total;
-            habitatList.forEach(function(h, i) {
-                var count = habitatCountsByPeriod[h.key];
-                var maxHabitatCountInAnyPeriod = d3.max(periodDetailsList, function(p) {
-                    return p.habitats[h.key];
-                });
-                var maxPeriodCountForAnyHabitat = d3.max(d3.map(habitatCountsByPeriod).values());
-                var alpha = count == 0 ? 0 : colorScale(count/maxPeriodCountForAnyHabitat);
-                // var alpha = count == 0 ? 0 : colorScale(count/total);
-                grid.push(
-                    {
-                        time: p.time,
-                        habitat: h,
-                        habitatKey: h.key,
-                        habitatOrder: i,
-                        alpha: alpha,
-                        color:
-                            alpha  == 0
-                                ? "rgba(0, 0, 0, 0.05)" // show zero data as gray
-                                : "rgba(" + h.color.r + ", " + h.color.g + ", " + h.color.b + ", " + alpha + ")"
-                    }
-                );
-            });
-        });
-
-    var periodRange = d3.range(2, d3.max(periodDetailsList, function(p) { return p.time+1; }));
-
-    var xscale = d3.scale.ordinal()
-        .domain(periodRange)
-        .rangeRoundBands([50, width], 0.1);
-
-    var yscale = d3.scale.ordinal()
-        .domain(d3.range(habitatList.length))
-        .rangeRoundBands([0, height], 0.1);
-
-    context.selection
-        .attr({
-            width: width,
-            height: height
-        });
-
-    context.selection.append("g")
-        .selectAll("text")
-        .data(habitatList)
-        .enter()
-        .append("text")
-        .text(function(d, i) {
-            return d.name;
-        })
-        .attr("class", "small-label")
-        .attr("x", 0)
-        .attr("y", function(d, i) {
-            return yscale(i) + yscale.rangeBand() - 2;
-        });
-
-    var gridRects = context.selection.append("g");
-    var periodRects = context.selection.append("g");
-
-    periodRects.selectAll("rect")
-        .data(periodDetailsList)
-        .enter()
-        .append("rect")
-        .attr("fill", "rgba(255, 255, 255, 0.0)")
-        .attr("x", function(d) {
-            return xscale(d.time);
-        })
-        .attr("y", yscale(0))
-        .attr("width", xscale.rangeBand())
-        .attr("height", yscale.range()[yscale.range().length-1] - yscale.range()[0] + yscale.rangeBand())
-        .on("mouseover", function(d) {
-            sync.selectTime(context, [d.time]);
-        })
-        .on("mouseout", function(d, i) {
-            sync.selectTime(context, periodRange);
-        });       
-
-    gridRects.selectAll("rect")
-        .data(grid)
-        .enter()
-        .append("rect")
-        .attr("class", function(d, i) {
-            return "habitat-at-time,habitat-" + d.habitatKey + ",period-" + d.time;
-        })
-        .attr("x", function(d, i) {
-            return xscale(d.time);
-        })
-        .attr("y", function(d, i) {
-            return yscale(d.habitatOrder);
-        })
-        .attr("width", xscale.rangeBand())
-        .attr("height", yscale.rangeBand())
-        .attr("fill", function(d, i) {
-            return d.color;
-        });
-
-    context.selectTime = function(times) {
-        periodRects.selectAll("rect")
-            .attr("fill", function(d, i) {
-                var alpha = 0.9;
-                // select this time, so don't obscure with overlay
-                if(times.indexOf(d.time) != -1) {
-                    alpha = 0;
-                }
-                return "rgba(255, 255, 255, " + alpha + ")";
-            })
-    };
 }
 
 function classHabitatsGraph(context, data) {
