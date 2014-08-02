@@ -125,8 +125,6 @@ fr.parse("/data/fr.csv", function(list) {
                     d3.ascending
             });
 
-    classHabitatsGraph(classHabitatsContext, classByHabitat);
-
     var phylumTimeline =
         fr.timelineRollup(data.orderedSpeciesList,
             {
@@ -137,6 +135,9 @@ fr.parse("/data/fr.csv", function(list) {
             });
 
     console.log(phylumTimeline);
+    classHabitatsGraph(classHabitatsContext, classByHabitat, phylumTimeline);
+
+
 
     // var h = fr.habitats.get("F");
     // graph(
@@ -606,9 +607,9 @@ function treerings(context, periodDetails, habitats, size, sync) {
         });
 }
 
-function classHabitatsGraph(context, data) {
+function classHabitatsGraph(context, data, tl) {
 
-    var width = 200,
+    var width = 500,
         height = 14 * data.ydomain.length;
 
     context.selection.attr({
@@ -618,7 +619,7 @@ function classHabitatsGraph(context, data) {
 
     var xscale = d3.scale.ordinal()
         .domain(d3.range(data.xdomain.length))
-        .rangeRoundBands([120, width], 0.05);
+        .rangeRoundBands([120, 200], 0.05);
 
     var yscale = d3.scale.ordinal()
         .domain(d3.range(data.ydomain.length))
@@ -658,6 +659,47 @@ function classHabitatsGraph(context, data) {
         })
         .attr("width", xscale.rangeBand())
         .attr("height", yscale.rangeBand());
+
+    var sg = context.selection.append("g");
+
+    var xscaleTL = d3.scale.ordinal()
+        .domain(d3.range(fr.periods().length))
+        .rangeRoundBands([200, width], 0);
+
+    var timedata = [];
+    tl.data.forEach(function(d, i) {
+        if(i == 0) console.log(d);
+        timedata = timedata.concat(d.timeline.map(function(e, j) {
+            return {
+                key: d.key,
+                time: j,
+                count: e,
+                max: d.max
+            };
+        }));
+    });
+
+    console.log(timedata);
+
+    sg.selectAll("rect")
+        .data(timedata)
+        .enter()
+        .append("rect")
+        .attr("fill", function(d, i) {
+            return "rgba(0, 0, 0, 0.4)";
+        })
+        .attr("x", function(d, i) {
+            return xscaleTL(d.time);
+        })
+        .attr("y", function(d, i) {
+            return yscale(data.ydomain.indexOf(d.key)) + 0.7*yscale.rangeBand() - 0.7*yscale.rangeBand()*d.count/d.max;
+        })
+        .attr("width", function(d, i) {
+            return xscaleTL.rangeBand();
+        })
+        .attr("height", function(d, i) {
+            return 0.7*yscale.rangeBand()*d.count/d.max;
+        });
 }
 
 </script>
