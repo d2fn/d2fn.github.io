@@ -637,7 +637,7 @@ function classHabitatsGraph(context, data, tl) {
         .attr("class", "small-label")
         .attr("x", 0)
         .attr("y", function(d, i) {
-            return yscale(i) + yscale.rangeBand()/2;
+            return yscale(i) + yscale.rangeBand()/2 + 4;
         });
 
     var grid = context.selection.append("g");
