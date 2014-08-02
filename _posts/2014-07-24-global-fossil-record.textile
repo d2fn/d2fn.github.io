@@ -603,7 +603,7 @@ function treerings(context, periodDetails, habitats, size, sync) {
             sync.selectTime(context, d3.range(0, d.time+1));
         })
         .on("mouseout", function(d, i) {
-            sync.selectTime(context, d3.range(0, periodDetailsList[periodDetailsList.length-1].time));
+            sync.selectTime(context, d3.range(0, periodDetailsList[periodDetailsList.length-1].time+1));
         });
 }
 
