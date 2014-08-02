@@ -609,7 +609,7 @@ function treerings(context, periodDetails, habitats, size, sync) {
 
 function classHabitatsGraph(context, data, tl) {
 
-    var width = 500,
+    var width = 400,
         height = 14 * data.ydomain.length;
 
     context.selection.attr({
