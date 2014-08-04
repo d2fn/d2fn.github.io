@@ -65,7 +65,13 @@ The following circular chart displays the same information in a different way. I
 
 As you hover over the above charts and they will all orient themselves to the same time period.
 
-<svg id="phylum-habitats" class="centered"/>
+Let's take a look at the habitats of each of the major kingdoms and the trend in species count for each.
+
+<svg id="kingdom-habitats"/>
+
+And now drill down by kingdom and phylum.
+
+<svg id="phylum-habitats"/>
 
 <script>
 
@@ -79,7 +85,48 @@ fr.parse("/data/fr.csv", function(list) {
     var chartSelection = d3.select("svg#fossil-record-list");
     var habitatGraphSelection = d3.select("svg#habitat-graph");
     var treeRingSelection = d3.select("svg#tree-rings");
+    var kingdomGraphSelection = d3.select("svg#kingdom-habitats");
     var phylumGraphSelection = d3.select("svg#phylum-habitats");
+
+    var kingdomTimeline =
+        fr.timelineRollup(data.orderedSpeciesList,
+            {
+                yfun:
+                    function(s) {
+                        return s.get("kingdom")
+                    }
+            });
+
+    var kingdomByHabitat =
+        fr.cross(data.orderedSpeciesList,
+            {
+                xfun:
+                    function(s) {
+                        return s.get("habitat").key;
+                    },
+                yfun: 
+                    function(s) {
+                        return s.get("kingdom");
+                    },
+                xsort: 
+                    function(a, b) {
+                        return fr.habitats.get(a).ordinal - fr.habitats.get(b).ordinal;
+                    },
+                ysort:
+                    function(a, b) {
+                        return kingdomTimeline.maxByKey[b] - kingdomTimeline.maxByKey[a];
+                    }
+                    //d3.ascending
+            });
+
+    var phylumTimeline =
+        fr.timelineRollup(data.orderedSpeciesList,
+            {
+                yfun:
+                    function(s) {
+                        return s.get("kingdom") + ", " + s.get("phylum");
+                    }
+            });
 
     var phylumByHabitat =
         fr.cross(data.orderedSpeciesList,
@@ -90,24 +137,19 @@ fr.parse("/data/fr.csv", function(list) {
                     },
                 yfun: 
                     function(s) {
-                        return s.get("phylum");
+                        return s.get("kingdom") + ", " + s.get("phylum");
                     },
                 xsort: 
                     function(a, b) {
                         return fr.habitats.get(a).ordinal - fr.habitats.get(b).ordinal;
                     },
                 ysort:
-                    d3.ascending
+                    function(a, b) {
+                        return phylumTimeline.maxByKey[b] - phylumTimeline.maxByKey[a];
+                    }
+                    //d3.ascending
             });
 
-    var phylumTimeline =
-        fr.timelineRollup(data.orderedSpeciesList,
-            {
-                yfun:
-                    function(s) {
-                        return s.get("phylum");
-                    }
-            });
 
     var chartContext = {
             selection: chartSelection
@@ -118,11 +160,14 @@ fr.parse("/data/fr.csv", function(list) {
         habitatGraphContext = {
             selection: habitatGraphSelection
         },
+        kingdomGraphContext = {
+            selection: kingdomGraphSelection
+        },
         phylumGraphContext = {
             selection: phylumGraphSelection
         },
         sync = {
-            context: [ chartContext, treeRingContext, habitatGraphContext, phylumGraphContext ],
+            context: [ chartContext, treeRingContext, habitatGraphContext, kingdomGraphContext, phylumGraphContext ],
             selectTime: function(source, times) {
                 this.context.forEach(function(c) {
                     c.selectTime(times);
@@ -133,7 +178,8 @@ fr.parse("/data/fr.csv", function(list) {
     chart(chartContext, data.orderedSpeciesList, data.timeline);
     treerings(treeRingContext, fr.periodDetails(), fr.habitats, 400, sync);
     habitatGraph(habitatGraphContext, fr.periodDetails(), fr.habitats, sync);
-    phylumGraph(phylumGraphContext, phylumByHabitat, phylumTimeline);
+    habitatTimetable(kingdomGraphContext, kingdomByHabitat, kingdomTimeline);
+    habitatTimetable(phylumGraphContext, phylumByHabitat, phylumTimeline);
 
     // var h = fr.habitats.get("F");
     // graph(
@@ -397,7 +443,7 @@ function habitatGraph(context, periodDetails, habitats, sync) {
             sync.selectTime(context, [d.time]);
         })
         .on("mouseout", function(d, i) {
-            sync.selectTime(context, periodRange);
+            sync.selectTime(context, d3.range(0, periodDetailsList[periodDetailsList.length-1].time+1));
         });       
 
     gridRects.selectAll("rect")
@@ -603,9 +649,9 @@ function treerings(context, periodDetails, habitats, size, sync) {
         });
 }
 
-function phylumGraph(context, data, tl) {
+function habitatTimetable(context, data, tl) {
 
-    var width = 300,
+    var width = 500,
         height = 14 * data.ydomain.length;
 
     context.selection.attr({
@@ -615,20 +661,21 @@ function phylumGraph(context, data, tl) {
 
     var xscale = d3.scale.ordinal()
         .domain(d3.range(data.xdomain.length))
-        .rangeRoundBands([120, 200], 0.05);
+        .rangeRoundBands([200, 280], 0.05);
 
     var yscale = d3.scale.ordinal()
         .domain(d3.range(data.ydomain.length))
         .rangeRoundBands([0, height], 0.05);
 
-    var ylabels = context.selection.append("g");
+    var ylabels1 = context.selection.append("g");
+    var ylabels2 = context.selection.append("g");
 
-    ylabels.selectAll("text")
+    ylabels1.selectAll("text")
         .data(data.ydomain)
         .enter()
         .append("text")
         .text(function(d) {
-            return d;
+            return d.split(",")[0];
         })
         .attr("class", "small-label")
         .attr("x", 0)
@@ -636,6 +683,20 @@ function phylumGraph(context, data, tl) {
             return yscale(i) + yscale.rangeBand()/2 + 4;
         });
 
+    ylabels2.selectAll("text")
+        .data(data.ydomain)
+        .enter()
+        .append("text")
+        .text(function(d) {
+            return d.split(",")[1];
+        })
+        .attr("class", "small-label")
+        .attr("x", 75)
+        .attr("y", function(d, i) {
+            return yscale(i) + yscale.rangeBand()/2 + 4;
+        });
+
+    var grid = context.selection.append("g");
     var grid = context.selection.append("g");
 
     grid.selectAll("rect")
@@ -658,7 +719,7 @@ function phylumGraph(context, data, tl) {
 
     var xscaleTL = d3.scale.ordinal()
         .domain(d3.range(fr.periods().length))
-        .rangeRoundBands([170, width], 0);
+        .rangeBands([280, width]);
 
     var timedata = [];
     tl.data.forEach(function(d, i) {
@@ -709,7 +770,6 @@ function phylumGraph(context, data, tl) {
             .append("g")
             .attr("transform", "translate(0, " + yscale(i) + ")");
 
-
         var colorScale = d3.scale.pow()
             .exponent(0.5)
             .domain([0, 1])
@@ -717,7 +777,6 @@ function phylumGraph(context, data, tl) {
 
         d.timeline.forEach(function(e, j) {
             if(j > 0) {
-                if(j < 10) console.log([e, e/max]);
                 var dataSegment = [d.timeline[j-1], d.timeline[j]];
                 var alpha = colorScale(d3.max(dataSegment)/tl.max);
                 sg.append("g")
