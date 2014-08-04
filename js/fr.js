@@ -321,6 +321,7 @@
         },
         timelineRollup: function(speciesList, args) {
             var agg = d3.map({});
+            var maxByKey = {};
             speciesList.forEach(function(s) {
                 var yval = args.yfun(s);
                 if(yval) {
@@ -332,6 +333,7 @@
                         cell = agg.get(yval);
                         timeline.forEach(function(t) {
                             cell.max = d3.max([cell.max, ++cell.timeline[t]]);
+                            maxByKey[cell.key] = cell.max;
                         });
                     }
                     else {
@@ -352,7 +354,8 @@
             });
             return {
                 max: d3.max(agg.values(), function(d) { return d.max; }),
-                data: agg.values()
+                maxByKey: maxByKey,
+                data: agg.values().sort(function(a, b) { return b.max - a.max; })
             }
         },
         comparators: [
