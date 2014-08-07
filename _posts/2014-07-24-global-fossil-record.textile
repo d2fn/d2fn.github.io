@@ -65,13 +65,16 @@ The following circular chart displays the same information in a different way. I
 
 As you hover over the above charts and they will all orient themselves to the same time period.
 
-Let's take a look at the habitats of each of the major kingdoms and the trend in species count for each.
+Let's take a look at the habitats of each of the major kingdoms and the trend in species count for each. We'll sort the following two graphs by species count instead of alphabetically. This will give a better sense of how the diversity of life forms vary.
 
 <svg id="kingdom-habitats"/>
 
 And now drill down by kingdom and phylum.
 
 <svg id="phylum-habitats"/>
+
+The first chart shows how the animal kingdom as a whole sees the greatest growth in diversity of life and overall species counts. But when considering the phylum we see that those in the Monera, Fungi, and Algae kingdom's dominate the top slots--with the exception of an appearance from the <a href="http://en.wikipedia.org/wiki/Phoronid">Phoronida</a> (also known as horseshoe worms).
+
 
 <script>
 
@@ -149,7 +152,6 @@ fr.parse("/data/fr.csv", function(list) {
                     }
                     //d3.ascending
             });
-
 
     var chartContext = {
             selection: chartSelection
@@ -789,6 +791,11 @@ function habitatTimetable(context, data, tl) {
                     .attr("d", line(dataSegment));
             }
         });
+        /**
+        .on("mouseover", function(d) {
+            console.log("select time " + j);
+        })
+        **/
         /**
         sg.selectAll("path")
             .data([d])
