@@ -65,6 +65,11 @@ The following circular chart displays the same information in a different way. I
 
 As you hover over the above charts and they will all orient themselves to the same time period.
 
+
+Now, looking at the total number of species over time shows that species diversity is moving up and to the right.
+
+<svg id="total-habitats"/>
+
 Let's take a look at the habitats of each of the major kingdoms and the trend in species count for each. We'll sort the following two graphs by species count instead of alphabetically. This will give a better sense of how the diversity of life forms vary.
 
 <svg id="kingdom-habitats"/>
@@ -73,7 +78,7 @@ And now drill down by kingdom and phylum.
 
 <svg id="phylum-habitats"/>
 
-The first chart shows how the animal kingdom as a whole sees the greatest growth in diversity of life and overall species counts. But when considering the phylum we see that those in the Monera, Fungi, and Algae kingdom's dominate the top slots--with the exception of an appearance from the <a href="http://en.wikipedia.org/wiki/Phoronid">Phoronida</a> (also known as horseshoe worms).
+The first chart shows how the animal kingdom as a whole sees the greatest growth in diversity of life and overall species counts. But when considering the phylum we see that those in the <a href="http://en.wikipedia.org/wiki/Monera">Monera</a>, <a href="http://en.wikipedia.org/wiki/Fungus">Fungi</a>, and <a href="http://en.wikipedia.org/wiki/Algae">Algae</a> kingdom's dominate the top slots--with the exception of an appearance from <a href="http://en.wikipedia.org/wiki/Phoronid">Phoronida</a> (also known as horseshoe worms).
 
 
 <script>
@@ -88,8 +93,40 @@ fr.parse("/data/fr.csv", function(list) {
     var chartSelection = d3.select("svg#fossil-record-list");
     var habitatGraphSelection = d3.select("svg#habitat-graph");
     var treeRingSelection = d3.select("svg#tree-rings");
+    var totalGraphSelection = d3.select("svg#total-habitats");
     var kingdomGraphSelection = d3.select("svg#kingdom-habitats");
     var phylumGraphSelection = d3.select("svg#phylum-habitats");
+
+    var totalTimeline =
+    fr.timelineRollup(data.orderedSpeciesList,
+        {
+            yfun:
+                function(s) {
+                    return "Life";
+                }
+        });
+
+    var totalByHabitat =
+        fr.cross(data.orderedSpeciesList,
+            {
+                xfun:
+                    function(s) {
+                        return s.get("habitat").key;
+                    },
+                yfun: 
+                    function(s) {
+                        return "Life";
+                    },
+                xsort: 
+                    function(a, b) {
+                        return fr.habitats.get(a).ordinal - fr.habitats.get(b).ordinal;
+                    },
+                ysort:
+                    function(a, b) {
+                        return totalTimeline.maxByKey[b] - totalTimeline.maxByKey[a];
+                    }
+                    //d3.ascending
+            });
 
     var kingdomTimeline =
         fr.timelineRollup(data.orderedSpeciesList,
@@ -162,6 +199,9 @@ fr.parse("/data/fr.csv", function(list) {
         habitatGraphContext = {
             selection: habitatGraphSelection
         },
+        totalGraphContext = {
+            selection: totalGraphSelection
+        },
         kingdomGraphContext = {
             selection: kingdomGraphSelection
         },
@@ -169,7 +209,14 @@ fr.parse("/data/fr.csv", function(list) {
             selection: phylumGraphSelection
         },
         sync = {
-            context: [ chartContext, treeRingContext, habitatGraphContext, kingdomGraphContext, phylumGraphContext ],
+            context: [
+                chartContext,
+                treeRingContext,
+                habitatGraphContext,
+                totalGraphContext,
+                kingdomGraphContext,
+                phylumGraphContext
+            ],
             selectTime: function(source, times) {
                 this.context.forEach(function(c) {
                     c.selectTime(times);
@@ -180,6 +227,7 @@ fr.parse("/data/fr.csv", function(list) {
     chart(chartContext, data.orderedSpeciesList, data.timeline);
     treerings(treeRingContext, fr.periodDetails(), fr.habitats, 400, sync);
     habitatGraph(habitatGraphContext, fr.periodDetails(), fr.habitats, sync);
+    habitatTimetable(totalGraphContext, totalByHabitat, totalTimeline);
     habitatTimetable(kingdomGraphContext, kingdomByHabitat, kingdomTimeline);
     habitatTimetable(phylumGraphContext, phylumByHabitat, phylumTimeline);
 
