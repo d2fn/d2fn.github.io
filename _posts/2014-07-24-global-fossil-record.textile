@@ -823,10 +823,10 @@ function habitatTimetable(context, data, tl) {
         var colorScale = d3.scale.pow()
             .exponent(0.5)
             .domain([0, 1])
-            .range([0.05, 0.8]);
+            .range([0.01, 0.8]);
 
         d.timeline.forEach(function(e, j) {
-            if(j > 0) {
+            if(e > 0 && j > 0) {
                 var dataSegment = [d.timeline[j-1], d.timeline[j]];
                 var alpha = colorScale(d3.max(dataSegment)/tl.max);
                 sg.append("g")
