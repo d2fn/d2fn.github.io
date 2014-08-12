@@ -48,6 +48,7 @@
 **/
 
 
+    // todo - read this from the file or something
     var periods = [
         "hadean precambrian",
         "isuan",
