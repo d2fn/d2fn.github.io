@@ -5,39 +5,47 @@
             key: "B",
             ordinal: 0,
             name: "Brackish",
+            color: d3.rgb(0, 69, 177)
         },
         "M": {
             key: "M",
             ordinal: 1,
             name: "Marine",
+            color: d3.rgb(29, 239, 134)
         },
         "L": {
             key: "L",
             ordinal: 2,
             name: "Littoral",
+            color: d3.rgb(219, 0, 0)
         },
         "F": {
             key: "F",
             ordinal: 3,
             name: "Freshwater",
+            color: d3.rgb(246, 241, 0)
         },
         "T": {
             key: "T",
             ordinal: 4,
             name: "Terrestrial",
+            color: d3.rgb(255, 121, 0)
         },
         "V": {
             key: "V",
             ordinal: 5,
             name: "Volant",
+            color: d3.rgb(175, 56, 240)
         }
     });
 
+/**
     var colorScale = colorbrewer.RdYlBu[habitats.values().length].reverse();
 
     habitats.values().forEach(function(h) {
         h.color = d3.rgb(colorScale[h.ordinal]);
     });
+**/
 
 
     var periods = [
