@@ -47,7 +47,6 @@
     });
 **/
 
-
     // todo - read this from the file or something
     var periods = [
         "hadean precambrian",
@@ -357,6 +356,7 @@
                                 }
                             });
                         cell.key = yval;
+                        maxByKey[cell.key] = 1;
                         agg.set(yval, cell);
                     }
                 }
