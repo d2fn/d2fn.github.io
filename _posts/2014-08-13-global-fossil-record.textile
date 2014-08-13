@@ -57,7 +57,7 @@ With this idea in mind let's take another look at the breakdown of species count
 
 <svg id="habitat-graph" class="centered"/>
 
-The following circular chart displays the same information in a different way. It can be thought of as reading the rings of a tree--the beginning of paleological time is in the center with the current era represented by the outer most ring. The size of each color represents the percentage of species occupying that habitat at that time. Hover over a ring to focus on only on that time period and prior.
+The following circular chart displays the same information in a different way. It can be thought of as reading the rings of a tree--the beginning of paleological time is in the center with the current era represented by the outer most ring. The arc width of each color represents the percentage of species occupying that habitat at that time. Hover over a ring to focus on only on that time period and prior.
 
 <svg id="tree-rings" class="centered"/>
 
