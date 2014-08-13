@@ -51,36 +51,37 @@ Often times just looking at all the data at once is a great way to get better or
 
 <svg id="fossil-record-list" class="centered"/>
 
-The chart above takes liberty to order data in a ways that are more likely to be meaningful. For example, ordering species alphabetically was unlikely to be useful so I ordered them by fossil age.  Some obvious patterns begin to emerge.
-
-First of all, at least in terms of number of distinct species we know about, the majority of life on Earth appears to be marine-based. However, this listing makes clear trends towards terrestrial life forms. So far our visuals agree with generally held scientific believe that life arose from the oceans and later moved onto the land.
+First of all, at least in terms of number of distinct species, the majority of life on Earth appears to be marine-based. However, this listing makes clear the trend towards terrestrial life. So far our data and its visuals agree with the general consensus in the scientific community that <a href="http://en.wikipedia.org/wiki/Evolutionary_history_of_life">life began in the ocean and later moved onto land</a>.
 
 With this idea in mind let's take another look at the breakdown of species count by habitat over time in a simple grid.
 
 <svg id="habitat-graph" class="centered"/>
 
-The following circular chart displays the same information in a different way. It can be thought of as reading the rings of a tree. The earliest time period is in the center with the current time period represented by the outer most ring. The size of each color represents the percentage of species occupying that habitat at that time. Hover over a ring to focus on only on that time period and prior.
+The following circular chart displays the same information in a different way. It can be thought of as reading the rings of a tree--the beginning of paleological time is in the center with the current era represented by the outer most ring. The size of each color represents the percentage of species occupying that habitat at that time. Hover over a ring to focus on only on that time period and prior.
 
 <svg id="tree-rings" class="centered"/>
-
-As you hover over the above charts and they will all orient themselves to the same time period.
-
 
 Now, looking at the total number of species over time shows that species diversity is moving up and to the right.
 
 <svg id="total-habitats"/>
 
-And by habitat.
+And now break down by habitat.
 
 <svg id="habitat-habitats"/>
 
-Let's take a look at the habitats of each of the major kingdoms and the trend in species count for each. We'll sort the following two graphs by species count instead of alphabetically. This will give a better sense of how the diversity of life forms vary.
+Let's zoom back out and look at how species diversity has varied by kingdom over time.
 
 <svg id="kingdom-habitats"/>
 
-And now drill down by kingdom and phylum.
+And now drill down by phylum.
 
 <svg id="phylum-habitats"/>
+
+It may come as no surprise that the most diverse phylum is the <a href="http://en.wikipedia.org/wiki/Chordate">Chordate</a>. This is a huge portion of what we consider the animal kingdom today. Everything from <a href="http://en.wikipedia.org/wiki/Fish">fish</a> to <a href="http://en.wikipedia.org/wiki/Bird">birds</a> to <a href="http://en.wikipedia.org/wiki/Pogona_vitticeps">pogona vitticeps</a>. Even <a href="http://en.wikipedia.org/wiki/Human">humans</a> are considered chordates.
+
+There are some important limitations to be aware of in this data set. We simply have presence information - e.g. <em>"did this species exist in this time period?"</em>. So while we can get a sense of diversity of live by habitat, kingdom, phylum, etc, we are left to look elsewhere for population counts. Furthermore, this data doesn't give a sense of <em>where</em> these species lived--and answering that question is made more difficult by the separation of <a href="http://en.wikipedia.org/wiki/Pangaea">Pangea</a> into the continents we know today.
+
+I'll leave further research as an exercise for the reader. There exists innumerable prior art on the topic. Nonetheless, it's possible to use data sets like this as a different kind of jumping off point for learning about a topic. And it's quite fun.
 
 <script>
 
@@ -186,10 +187,9 @@ fr.parse("/data/fr.csv", function(list) {
                         return fr.habitats.get(a).ordinal - fr.habitats.get(b).ordinal;
                     },
                 ysort:
-                    // function(a, b) {
-                    //     return kingdomTimeline.maxByKey[b] - kingdomTimeline.maxByKey[a];
-                    // }
-                    d3.ascending
+                    function(a, b) {
+                        return kingdomTimeline.maxByKey[b] - kingdomTimeline.maxByKey[a];
+                    }
             });
 
     var phylumTimeline =
@@ -272,8 +272,8 @@ fr.parse("/data/fr.csv", function(list) {
 
 function chart(context, speciesList, timegrid) {
     var width        = 960,
-        height       = 500,
-        columnCount  = 8,
+        height       = 1200,
+        columnCount  = 15,
         legendHeight = 8,
         selection    = context.selection,
         margin       = {
@@ -535,12 +535,14 @@ function habitatGraph(context, periodDetails, habitats, sync) {
             return xscale(d.time);
         })
         .attr("y", function(d, i) {
-            return yscale(d.habitatOrder);
+            return yscale(d.habitatOrder) + (1-d.alpha)*yscale.rangeBand();
         })
         .attr("width", xscale.rangeBand())
-        .attr("height", yscale.rangeBand())
+        .attr("height", function(d, i) {
+            return d.alpha * yscale.rangeBand();
+        })
         .attr("fill", function(d, i) {
-            return d.color;
+            return d.habitat.color.toString();
         });
 
     context.selection.append("g")
@@ -613,7 +615,7 @@ function treerings(context, periodDetails, habitats, size, sync) {
 
     var rscale = d3.scale.linear()
         .domain([2, periodDetailsList.length])
-        .range([0, (size-10)/2]);
+        .range([0, 0.4*size]);
 
     var arc = d3.svg.arc()
         .startAngle(function(d, i) {
@@ -689,8 +691,8 @@ function treerings(context, periodDetails, habitats, size, sync) {
             var startAngle = (data.length == 0 ? 0 : data[data.length-1].endAngle);
             data.push({
                 key: h.key + "-" + maxTime,
-                innerRadius: size/10,
-                outerRadius: size/3,
+                innerRadius: rscale.range()[1]-10,
+                outerRadius: rscale.range()[1],
                 startAngle: startAngle,
                 endAngle: startAngle + arcLength,
                 color: h.color
@@ -730,7 +732,7 @@ function treerings(context, periodDetails, habitats, size, sync) {
 function habitatTimetable(context, data, tl, labelHabitats) {
 
     var xlabelh = labelHabitats ? 75 : 0,
-        width = 350,
+        width = 440,
         height = xlabelh + 14 * data.ydomain.length;
 
     context.selection.attr({
