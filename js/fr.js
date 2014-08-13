@@ -17,13 +17,13 @@
             key: "L",
             ordinal: 2,
             name: "Littoral",
-            color: d3.rgb(219, 0, 0)
+            color: d3.rgb(246, 241, 0)
         },
         "F": {
             key: "F",
             ordinal: 3,
             name: "Freshwater",
-            color: d3.rgb(246, 241, 0)
+            color: d3.rgb(219, 0, 0)
         },
         "T": {
             key: "T",
