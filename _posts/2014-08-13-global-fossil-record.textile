@@ -43,7 +43,7 @@ title: "Grab a Shovel Pt 1: Global Fossil Record"
     }
 </style>
 
-Large data sets can be intimidating. I don't mean this in the "big data" sense, but curiosity of a subject area can be frustrating when there exists a large volume of information to consider and you're not really sure where to start. What do you do when nascent curiosity outstrips your ability to ask intelligent questions?
+Large data sets can be intimidating. Curiosity of a subject area can be frustrating when there exists a large volume of information to consider but no clear place to start. What do we do when nascent curiosity outstrips our ability to ask intelligent questions?
 
 Some time back I came across the <a href="http://paleobiodb.org/cgi-bin/bridge.pl">global fossil record</a>. This includes an account of fossil records for over six thousand species. Specific details include habitat, taxonomy, and data about when the species lived. Historical accounts span from the Hadean <a href="http://en.wikipedia.org/wiki/Precambrian">Precambrian</a> to the current <a href="http://en.wikipedia.org/wiki/Holocene">Holocene</a> period based on the <a href="http://en.wikipedia.org/wiki/Geologic_time_scale">Geologic time scale</a>.
 
