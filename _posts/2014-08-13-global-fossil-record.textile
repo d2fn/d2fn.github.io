@@ -266,8 +266,8 @@ fr.parse("/data/fr.csv", function(list) {
         };
 
     chart(chartContext, data.orderedSpeciesList, data.timeline);
-    treerings(treeRingContext, fr.periodDetails(), fr.habitats, 400, sync);
     habitatGraph(habitatGraphContext, fr.periodDetails(), fr.habitats, sync);
+    treerings(treeRingContext, fr.periodDetails(), fr.habitats, 400, sync);
     habitatTimetable(totalGraphContext, totalByHabitat, totalTimeline, true);
     habitatTimetable(habitatTimelineGraphContext, habitatByHabitat, habitatGraphTimeline);
     habitatTimetable(kingdomGraphContext, kingdomByHabitat, kingdomTimeline);
@@ -462,7 +462,7 @@ function habitatGraph(context, periodDetails, habitats, sync) {
         .sort(function(a, b) {
             return a.time - b.time;
         });
-    var habitatList = habitats.values().sort(function(a, b) { return a.count - b.count; });
+    //var habitatList = habitats.values().sort(function(a, b) { return a.count - b.count; });
     periodDetailsList
         .forEach(function(p) {
             var habitatCountsByPeriod = p.habitats;
