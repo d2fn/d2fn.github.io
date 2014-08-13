@@ -535,14 +535,12 @@ function habitatGraph(context, periodDetails, habitats, sync) {
             return xscale(d.time);
         })
         .attr("y", function(d, i) {
-            return yscale(d.habitatOrder) + (1-d.alpha)*yscale.rangeBand();
+            return yscale(d.habitatOrder);
         })
         .attr("width", xscale.rangeBand())
-        .attr("height", function(d, i) {
-            return d.alpha * yscale.rangeBand();
-        })
+        .attr("height", yscale.rangeBand())
         .attr("fill", function(d, i) {
-            return d.habitat.color.toString();
+            return d.color;
         });
 
     context.selection.append("g")
