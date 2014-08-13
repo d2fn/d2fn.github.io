@@ -85,7 +85,7 @@ There are some important limitations to be aware of in this data set. We simply 
 
 It is also important to recognize that this data set reveals massive gaps in our understanding of how life has evolved into what we see today. While six thousand species are included in this data set, <a href="http://www.unep.org/newscentre/default.aspx?DocumentID=2649&ArticleID=8838">Earth is home to an estimated 8.7 million species</a> today. Were the fossil record more complete, the problem of classifying species would be much more difficult. The differentials between each would grow smaller and smaller to the point that strict categorizations make less and less sense. The specialized life forms we see today came from the same place but we lack sufficient data to show the exact progression.
 
-I'll leave further research as an exercise for the reader. There exists innumerable prior art on the topic. Nonetheless, it's possible to use data sets like this as a different kind of jumping off point for learning about a topic. And it's quite fun.
+I'll leave further research as an exercise for the reader. There exists innumerable prior art on the topic. Nonetheless, it is possible to use data sets like this as a different kind of jumping off point for learning about a topic. And it's quite fun.
 
 <script>
 
