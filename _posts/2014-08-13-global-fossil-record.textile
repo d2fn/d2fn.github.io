@@ -77,7 +77,7 @@ And now drill down by phylum.
 
 <svg id="phylum-habitats"/>
 
-It may come as no surprise that the most diverse phylum is the <a href="http://en.wikipedia.org/wiki/Chordate">Chordate</a>. This is a huge portion of what we consider the animal kingdom today. Everything from <a href="http://en.wikipedia.org/wiki/Fish">fish</a> to <a href="http://en.wikipedia.org/wiki/Bird">birds</a> to <a href="http://en.wikipedia.org/wiki/Pogona_vitticeps">pogona vitticeps</a>. Even <a href="http://en.wikipedia.org/wiki/Human">humans</a> are considered chordates.
+It may come as no surprise that the most diverse phylum is <a href="http://en.wikipedia.org/wiki/Chordate">chordata</a>. This is a huge portion of what we consider the animal kingdom today. Everything from <a href="http://en.wikipedia.org/wiki/Fish">fish</a> to <a href="http://en.wikipedia.org/wiki/Bird">birds</a> to <a href="http://en.wikipedia.org/wiki/Pogona_vitticeps">pogona vitticeps</a>. Even <a href="http://en.wikipedia.org/wiki/Human">humans</a> are considered chordates.
 
 There are some important limitations to be aware of in this data set. We simply have presence information - e.g. <em>"did this species exist in this time period?"</em>. So while we can get a sense of diversity of live by habitat, kingdom, phylum, etc, we are left to look elsewhere for population counts. Furthermore, this data doesn't give a sense of <em>where</em> these species lived--and answering that question is made more difficult by the separation of <a href="http://en.wikipedia.org/wiki/Pangaea">Pangea</a> into the continents we know today.
 
