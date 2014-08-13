@@ -43,33 +43,33 @@ title: "Grab a Shovel Pt 1: Global Fossil Record"
     }
 </style>
 
-Sometimes large data sets can be intimidating. I don't mean this in the "big data" sense, but curiosity of a subject area can be frustrating when there exists a large volume of information to consider and you're not really sure where to start. What do you do when nascent curiosity outstrips your ability to ask intelligent questions?
+Large data sets can be intimidating. I don't mean this in the "big data" sense, but curiosity of a subject area can be frustrating when there exists a large volume of information to consider and you're not really sure where to start. What do you do when nascent curiosity outstrips your ability to ask intelligent questions?
 
 Some time back I came across the <a href="http://paleobiodb.org/cgi-bin/bridge.pl">global fossil record</a>. This includes an account of fossil records for over six thousand species. Specific details include habitat, taxonomy, and data about when the species lived. Historical accounts span from the Hadean <a href="http://en.wikipedia.org/wiki/Precambrian">Precambrian</a> to the current <a href="http://en.wikipedia.org/wiki/Holocene">Holocene</a> period based on the <a href="http://en.wikipedia.org/wiki/Geologic_time_scale">Geologic time scale</a>.
 
-Often times just looking at all the data at once is a great way to get better oriented. The following chart simply lists every species on record with a timeline of its occurrences in each of the geologic time scales color coded by the habitat that species occupies. This isn't a finished visualization. Our goal is to flood our visual cortex with information and see what patterns stand out.
+The following chart simply lists every species on record with a timeline of its occurrences in each of the geologic time scales color coded by the habitat that species occupies. This isn't a finished visualization. We just want to flood our visual cortex with information and see what patterns stand out.
 
 <svg id="fossil-record-list" class="centered"/>
 
-First of all, at least in terms of number of distinct species, the majority of life on Earth appears to be marine-based. However, this listing makes clear the trend towards terrestrial life. So far our data and its visuals agree with the general consensus in the scientific community that <a href="http://en.wikipedia.org/wiki/Evolutionary_history_of_life">life began in the ocean and later moved onto land</a>.
+At least in terms of number of distinct species, the majority of life on Earth appears to be marine-based. This listing also makes clear the trend towards terrestrial life. So far our data and its visuals agree with the general consensus in the scientific community that <a href="http://en.wikipedia.org/wiki/Evolutionary_history_of_life">life began in the ocean and later moved onto land</a>.
 
-With this idea in mind let's take another look at the breakdown of species count by habitat over time in a simple grid.
+Let's aggregate this data in such a way that the movement of life from ocean to land environments is more clear. Time extends to the right in the following habitat grid.
 
 <svg id="habitat-graph" class="centered"/>
 
-The following circular chart displays the same information in a different way. It can be thought of as reading the rings of a tree--the beginning of paleological time is in the center with the current era represented by the outer most ring. The arc width of each color represents the percentage of species occupying that habitat at that time. Hover over a ring to focus on only on that time period and prior.
+The following graph displays the same information in a different way. It can be thought of as reading the rings of a tree--the beginning of paleological time is at the center with the current era represented by the outer most ring. The arc width of each color represents the percentage of species occupying that habitat at that time. Hover over a ring to focus on only on that time period and prior.
 
 <svg id="tree-rings" class="centered"/>
 
-Now, looking at the total number of species over time shows that species diversity is moving up and to the right.
+The fossil record indicates that diversity of life has been increasing over time as far back as we can see.
 
 <svg id="total-habitats"/>
 
-And now break down by habitat.
+Let's see how this varies by habitat.
 
 <svg id="habitat-habitats"/>
 
-Let's zoom back out and look at how species diversity has varied by kingdom over time.
+Let's zoom back out to see how species diversity varies by kingdom over time.
 
 <svg id="kingdom-habitats"/>
 
