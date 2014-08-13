@@ -61,7 +61,7 @@ The following graph displays the same information in a different way. It can be 
 
 <svg id="tree-rings" class="centered"/>
 
-The fossil record indicates that diversity of life has been increasing over time as far back as we can see.
+This data indicates that whole planet species diversity has been forever increasing.
 
 <svg id="total-habitats"/>
 
