@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Grab a Shovel Pt 1: Global Fossil Record"
+title: "Grab a Shovel Pt 1: The Global Fossil Record"
 ---
 
 <style>
@@ -43,17 +43,17 @@ title: "Grab a Shovel Pt 1: Global Fossil Record"
     }
 </style>
 
-Large data sets can be intimidating. Curiosity of a subject area can be frustrating when there exists a large volume of information to consider but no clear place to start. What do we do when nascent curiosity outstrips our ability to ask intelligent questions?
+Curiosity of a subject area can be frustrating when there exists a large volume of information to consider but no clear place to start. What do we do when nascent curiosity outstrips our ability to ask intelligent questions?
 
 Some time back I came across the <a href="http://paleobiodb.org/cgi-bin/bridge.pl">global fossil record</a>. This includes an account of fossil records for over six thousand species. Specific details include habitat, taxonomy, and data about when the species lived. Historical accounts span from the Hadean <a href="http://en.wikipedia.org/wiki/Precambrian">Precambrian</a> to the current <a href="http://en.wikipedia.org/wiki/Holocene">Holocene</a> period based on the <a href="http://en.wikipedia.org/wiki/Geologic_time_scale">Geologic time scale</a>.
 
-The following chart simply lists every species on record with a timeline of its occurrences in each of the geologic time scales color coded by the habitat that species occupies. This is not a finished visualization. We just want to flood our visual cortex with information and see what patterns stand out.
+The following chart lists every species on record with a timeline of its occurrences in each of the geologic time scales color coded by the habitat that species occupies. This is not a finished visualization. It is a means to show all of the data at once without interpretation. The goal of this listing is to flood our visual cortex with information and see what patterns stand out.
 
 <svg id="fossil-record-list" class="centered"/>
 
-At least in terms of number of distinct species, the majority of life on Earth appears to be marine-based. This listing also makes clear the trend towards terrestrial life. So far our visuals support the general consensus in the scientific community that <a href="http://en.wikipedia.org/wiki/Evolutionary_history_of_life">life began in the ocean and later moved onto land</a>.
+<h2>Learning to Crawl</h2>
 
-Let's aggregate this data in such a way that the movement of life from ocean to land environments is more clear. Time extends to the right in the following habitat grid.
+At least in terms of number of distinct species, the majority of life on Earth appears to be marine-based. What's interesting is that this listing also points to a trend towards terrestrial life. Let's test this by visualizing habitat changes over time. 
 
 <svg id="habitat-graph" class="centered"/>
 
@@ -61,7 +61,11 @@ The following graph displays the same information in a different way. It can be 
 
 <svg id="tree-rings" class="centered"/>
 
-This data indicates that whole planet species diversity has been forever increasing.
+You might remember this from science class, but there is a general consensus that life <a href="http://en.wikipedia.org/wiki/Evolutionary_history_of_life">began in the ocean and later moved onto land</a>--and our data agrees. We must be on the right track.
+
+<h2>Diversity of Life</h2>
+
+This data also indicates that whole planet species diversity has been forever increasing.
 
 <svg id="total-habitats"/>
 
@@ -77,15 +81,23 @@ And now drill down by phylum.
 
 <svg id="phylum-habitats"/>
 
-It may come as no surprise that the most diverse phylum is <a href="http://en.wikipedia.org/wiki/Chordate">chordata</a>. This is a huge portion of what we consider the animal kingdom today. Everything from <a href="http://en.wikipedia.org/wiki/Fish">fish</a> to <a href="http://en.wikipedia.org/wiki/Bird">birds</a> to <a href="http://en.wikipedia.org/wiki/Pogona_vitticeps">pogona vitticeps</a>. Even <a href="http://en.wikipedia.org/wiki/Human">humans</a> are considered chordates.
+From this visualization we see that the most diverse phylum is <a href="http://en.wikipedia.org/wiki/Chordate">chordata</a>, which is a huge portion of what we consider the animal kingdom today. Everything from <a href="http://en.wikipedia.org/wiki/Dog">dogs</a> to <a href="http://en.wikipedia.org/wiki/Fish">fish</a> to <a href="http://en.wikipedia.org/wiki/Bird">birds</a> to <a href="http://en.wikipedia.org/wiki/Pogona_vitticeps">pogona vitticeps</a>. Even <a href="http://en.wikipedia.org/wiki/Human">humans</a> are considered chordates.
 
-<em>Caveat emptor</em>
+<h2>Unanswered Questions</h2>
 
-There are some important limitations to be aware of in this data set. We simply have presence information, i.e. <em>"did this species exist in this time period?"</em>. So while we can get a sense of diversity of life by habitat, kingdom, phylum, etc, we are left to look elsewhere for population counts. Furthermore, this data does not give a sense of <em>where</em> these species lived--and answering that question is made more difficult by the separation of <a href="http://en.wikipedia.org/wiki/Pangaea">Pangea</a> into the continents we know today.
+There are some important limitations to be aware of in this data set. First, we only have temporal presence information, i.e. <em>"did this species exist in this time period?"</em>. So while we can get a sense of diversity of life by habitat, kingdom, phylum, etc, we are left to look elsewhere for population counts. Furthermore, this data does not give a sense of <em>where</em> these species lived--and answering that question is made more difficult by the separation of <a href="http://en.wikipedia.org/wiki/Pangaea">Pangea</a> into the continents we know today.
 
-It is also important to recognize that this data set reveals massive gaps in our understanding of how life has evolved into what we see today. While six thousand species are included in this data set, <a href="http://www.unep.org/newscentre/default.aspx?DocumentID=2649&ArticleID=8838">Earth is home to an estimated 8.7 million species</a> today. Were the fossil record more complete, species classification would be more nuanced. The differentials between each would grow smaller and smaller to the point that strict categorizations make less and less sense. The specialized life forms we see today came from the same place but we lack sufficient data to show the exact progression.
+It is also is important to recognize that this data set reveals massive gaps in our understanding of how life has evolved into what we see today. While six thousand species are included in this data set, <a href="http://www.unep.org/newscentre/default.aspx?DocumentID=2649&ArticleID=8838">Earth is home to an estimated 8.7 million species</a> today. But this number doesn't tell the whole story. Classification of organisms into species <a href="http://en.wikipedia.org/wiki/Species_problem">remains controversial</a>.
 
-I'll leave further research as an exercise for the reader. There exists innumerable prior art on the topic. Nonetheless, it is possible to use data sets like this as a different kind of jumping off point for learning about a topic. And it's quite fun.
+Remember that natural selection is an immensely slow process. What we might consider minor variations can take millions of generations to evolve. This means entirely new species take <a href="http://en.wikipedia.org/wiki/Speciation">even longer</a> to emerge. It is fun to think about how our classification system would have to change to accomdate a comprehensive fossil record. Would we be coerced into inventing an entirely new system to replace the traditional kingdom/phylum/class structure? How would such a taxonomical system address these infinitesimally small variations between species?
+
+<h2>Onward and Upward</h2>
+
+I'll leave further research as an exercise for the reader. There exists innumerable prior art on this topic and the links in this article make for excellent further reading. Nonetheless, it is possible to use data sets like this as a different kind of jumping off point for learning about a topic. And it can be quite rewarding.
+
+---
+
+The visuals in this article are done with <a href="http://d3js.org/">d3</a>. It's a fantastic tool for explaning data in a classy way. You can find more of my d3 sketches on <a href="http://bl.ocks.org/d2fn">bl.ocks</a>.
 
 <script>
 
