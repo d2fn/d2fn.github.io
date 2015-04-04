@@ -1,0 +1,26 @@
+Music Animation Machine
+http://www.musanim.com/
+
+Aviation Recorder Overview, Oscillographic Foil Recorder
+http://www.iasa.com.au/folders/Publications/pdf_library/grossi.pdf
+
+Black box: Inside a flight data recorder (engineerguy)
+https://www.youtube.com/watch?v=xlY5W7be5jU
+
+Pat Helland, Immutability Changes Everything
+http://www.cidrdb.org/cidr2015/Papers/CIDR15_Paper16.pdf
+
+Alvaro, Bailis, Conway, Hellerstein, Consistency Without Borders
+http://db.cs.berkeley.edu/papers/socc13-consistency.pdf
+
+HyperLogLog: analysis of a near-optimal cardinality estimation algorithm
+http://algo.inria.fr/flajolet/Publications/FlFuGaMe07.pdf
+
+	PostgreSQL HLL Plugin
+	https://github.com/aggregateknowledge/postgresql-hll
+
+	Binary-compatible Java HLL Library
+	https://github.com/aggregateknowledge/java-hll
+ 
+Ghosh, Debasish - A collection of links for streaming algorithms and data structures - Debasish Ghosh
+https://gist.github.com/debasishg/8172796
