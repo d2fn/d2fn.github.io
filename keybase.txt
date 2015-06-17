@@ -1,0 +1,67 @@
+==================================================================
+https://keybase.io/d2fn
+--------------------------------------------------------------------
+
+I hereby claim:
+
+  * I am an admin of http://d2fn.com
+  * I am d2fn (https://keybase.io/d2fn) on keybase.
+  * I have a public key with fingerprint 9B44 A7D0 3783 FD03 570C  89FC AFEC 18F7 30BD 71C8
+
+To do so, I am signing this object:
+
+{
+    "body": {
+        "key": {
+            "fingerprint": "9b44a7d03783fd03570c89fcafec18f730bd71c8",
+            "host": "keybase.io",
+            "key_id": "afec18f730bd71c8",
+            "kid": "010124e7b8107cc318ce393710de411034819eea704291b389530b81932998a458080a",
+            "uid": "842c262eeecf14952ea9f994a6a1da19",
+            "username": "d2fn"
+        },
+        "service": {
+            "hostname": "d2fn.com",
+            "protocol": "http:"
+        },
+        "type": "web_service_binding",
+        "version": 1
+    },
+    "ctime": 1430339933,
+    "expire_in": 157680000,
+    "prev": "beb2087fbd106af9d33f5575a070e6957a7f2ae4c932cd1b7c1aeee161739fcd",
+    "seqno": 3,
+    "tag": "signature"
+}
+
+which yields the signature:
+
+-----BEGIN PGP MESSAGE-----
+Version: Keybase OpenPGP v2.0.8
+Comment: https://keybase.io/crypto
+
+yMIUAnicbVJbSBVBGD7m6aRidxXyQXKfxExmdnbP7JyMUjQihKAsCiyZnZ3V9XL2
+eM4eL4lQSaBkdA8L7UGK6GZgEGFBpdEVHyrQKLWsJLBTRPVQWdmsFPTQvPzM93/f
+9/P9M7fnxnuS4lKVtPEBb3dB3MNbWtSzKT9/W5Ok20ajFGiSqvhMMa1gOQ+HwlbQ
+kQIS0RWFYgMgrCFTFBUDphGTUZMzqJkYAd3AkGlSjlRhR1yFsNFphOdatsDEpcwy
+BPofftVMA0AAZYVjXYMAM4agxjgiCENgcAVCgBQNEs4pBopMoI40ogoPgSGZEI0q
+qgY0QIVddMZOU2Qm+2XOOTOhQlSZU2ISolA/hQaFxCVGeDhIa7hgG7IZlJpzJIHU
+WYy78d0U/3RzmV0jNKGw7djMrhZoheOEAq7IaQy5rHqul/3Rl+lW0BDrE4I6Ho5Y
+dlAKQMFkjuUaQgUBhAhBKEfiDSErzMssl6FivwbEccfwOmGpc10GGjZ1AwI/NYmB
+kKmqWKUAA+4nKqbYlClXmFgCM6COGaQiMfRDjMTbGJKbqDZoSwExyaHlwjJilQep
+Ew1zqbn/ZqnXE5fk8c2e5X4AT1Ligr/fYqIowXP03L2DqWfWK9KraOHIeF+uf7Bj
+8Yg39emH0aFYW+uPnd3Dx/pP199Ma4kW9V57pw+tvPqoeerQA+36+1+x+Z0nUdZQ
+yt05X3xNvuPfYvNGPZUVWzJKRtOu3HEiY9Hu4UPZ5sjgvmeprU2xIyXTxWuySo/v
+WlZ8udObGV2X05e8Pau448bz8fyWuZXjqw4/3pg3kHjKcz8WX+Rr6ynO21A0+GRi
+x4uGred7Pu+/vPmEr/DN3gt6V+1I1evd0vclTkpWfmH68rHMj96OTQnpgUuJvL26
+d+nPt5ntLP7T6rV8YXb/xKLZicldx+JeTk4Fplf0ZERS1n8tOIty+yZL91ws7J10
+DvwGX7cggQ==
+=HzMV
+-----END PGP MESSAGE-----
+
+And finally, I am proving ownership of this host by posting or
+appending to this document.
+
+View my publicly-auditable identity here: https://keybase.io/d2fn
+
+==================================================================
